@@ -19,51 +19,25 @@ public class MainApp extends Application {
         showLogin();
     }
 
-    // ----------------- LOGIN -----------------
+    // ===================== LOGIN =====================
     public void showLogin() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
-            Parent root = loader.load();
-
-            // Lấy controller và truyền MainApp
-            LoginController controller = loader.getController();
-            controller.setMainApp(this);
-            
-            
-
-            Scene scene = new Scene(root);
-            // Load CSS nếu có
-            scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
-
-            primaryStage.setTitle("Login");
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        loadScreenWithController(
+                "/fxml/Login.fxml",
+                "Login",
+                LoginController.class
+        );
     }
 
-    // ----------------- REGISTER -----------------
+    // ===================== REGISTER =====================
     public void showRegister() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Register.fxml"));
-            Parent root = loader.load();
-
-            RegisterController controller = loader.getController();
-            controller.setMainApp(this);
-
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
-
-            primaryStage.setTitle("Register");
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        loadScreenWithController(
+                "/fxml/Register.fxml",
+                "Register",
+                RegisterController.class
+        );
     }
 
-    // ----------------- DASHBOARDS -----------------
+    // ===================== DASHBOARDS =====================
     public void showAdminDashboard() {
         loadScreen("/fxml/AdminDashboard.fxml", "Admin Dashboard");
     }
@@ -72,7 +46,7 @@ public class MainApp extends Application {
         loadScreen("/fxml/CustomerDashboard.fxml", "Customer Dashboard");
     }
 
-    // ----------------- MANAGEMENT SCREENS -----------------
+    // ===================== MANAGEMENT SCREENS =====================
     public void showCarManagement() {
         loadScreen("/fxml/CarManagement.fxml", "Car Management");
     }
@@ -89,7 +63,30 @@ public class MainApp extends Application {
         loadScreen("/fxml/Review.fxml", "Review Management");
     }
 
-    // ----------------- HÀM CHUNG LOAD SCREEN -----------------
+    // ===================== HÀM CHUNG LOAD SCREEN =====================
+    // Load screen với controller (Login & Register)
+    private <T> void loadScreenWithController(String fxmlPath, String title, Class<T> controllerClass) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent root = loader.load();
+
+            // truyền MainApp vào controller
+            T controller = loader.getController();
+            controllerClass.getMethod("setMainApp", MainApp.class).invoke(controller, this);
+
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+
+            primaryStage.setTitle(title);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Load screen không cần truyền controller
     private void loadScreen(String fxmlPath, String title) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
@@ -101,6 +98,7 @@ public class MainApp extends Application {
             primaryStage.setTitle(title);
             primaryStage.setScene(scene);
             primaryStage.show();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
