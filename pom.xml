@@ -11,8 +11,8 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>24</maven.compiler.source>
+        <maven.compiler.target>24</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         
         <javafx.version>25.0.1</javafx.version> <javafx.platform>win</javafx.platform> <hibernate.version>6.3.1.Final</hibernate.version>
@@ -93,7 +93,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler.plugin.version}</version>
                 <configuration>
-                    <release>17</release>
+                    <release>24</release>
                 </configuration>
             </plugin>
 

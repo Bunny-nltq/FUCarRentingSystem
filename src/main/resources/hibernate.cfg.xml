@@ -15,8 +15,11 @@
         <property name="hbm2ddl.auto">update</property>
 
         <!-- Khai báo Entity -->
+       <mapping class="com.fucar.entity.Account"/>
+        <mapping class="com.fucar.entity.Customer"/>
         <mapping class="com.fucar.entity.Car"/>
         <mapping class="com.fucar.entity.CarProducer"/>
-
+        <mapping class="com.fucar.entity.CarRental"/>
+        <mapping class="com.fucar.entity.Review"/>
     </session-factory>
 </hibernate-configuration>

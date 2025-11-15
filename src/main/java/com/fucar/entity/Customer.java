@@ -1,28 +1,63 @@
 package com.fucar.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 @Table(name = "Customer")
 public class Customer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer customerID;
+    private Integer customerId;
 
-    @Column(nullable = false)
-    private String customerName;
+    private String fullName;
+    private String phone;
+    private String address;
 
-    private String mobile;
-    private LocalDate birthday;
-    private String identityCard;
-    private String licenceNumber;
-    private LocalDate licenceDate;
-    private String email;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "AccountID")
+    @OneToOne
+    @JoinColumn(name = "accountId")
     private Account account;
 
-    // getters & setters
+    public Customer() {}
+
+    public Customer(String fullName, String phone, String address, Account account) {
+        this.fullName = fullName;
+        this.phone = phone;
+        this.address = address;
+        this.account = account;
+    }
+
+    // GETTER - SETTER
+
+    public Integer getCustomerId() {
+        return customerId;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
 }

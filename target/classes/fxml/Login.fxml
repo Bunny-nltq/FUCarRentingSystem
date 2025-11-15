@@ -13,7 +13,7 @@
     <TextField fx:id="txtEmail" promptText="Email" />
     <PasswordField fx:id="txtPassword" promptText="Password" />
 
-    <Button fx:id="btnLogin" text="Login" />
-    <Button fx:id="btnGoRegister" text="Go to Register" />
+    <Button fx:id="btnLogin" text="Login" onAction="#handleLogin" />
+    <Button fx:id="btnGoRegister" text="Go to Register" onAction="#goRegister" />
 
 </VBox>

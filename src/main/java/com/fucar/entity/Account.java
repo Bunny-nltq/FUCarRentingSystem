@@ -1,33 +1,66 @@
 package com.fucar.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Account")
 public class Account {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer accountID;
+    private Integer accountId;
 
-    @Column(nullable = false, unique = true, length = 100)
-    private String accountName;
-
-    @Column(nullable = false, length = 255)
-    private String passwordHash;
-
-    @Column(nullable = false, length = 20)
-    private String role; // ADMIN / STAFF / CUSTOMER
+    @Column(nullable = false, unique = true)
+    private String email;
 
     @Column(nullable = false)
-    private Boolean isLocked = false;
+    private String passwordHash;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(nullable = false)
+    private String role; // "ADMIN" hoặc "CUSTOMER"
 
-    // One-to-one with AccountProfile
-    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private AccountProfile profile;
+    @OneToOne(mappedBy = "account")
+    private Customer customer;
 
-    // getters & setters
-    // (generate via IDE)
+    public Account() {}
+
+    public Account(String email, String passwordHash, String role) {
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.role = role;
+    }
+
+    // GETTER - SETTER
+
+    public Integer getAccountId() {
+        return accountId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
 }
