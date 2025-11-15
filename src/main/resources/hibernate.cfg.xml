@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <!-- Hibernate Dialect -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
+
+        <!-- MySQL Driver -->
+        <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+
+        <!-- Database Connection URL -->
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/car_rental_db</property>
+
+        <!-- Database Username -->
+        <property name="hibernate.connection.username">root</property>
+
+        <!-- Database Password -->
+        <property name="hibernate.connection.password">123456</property>
+
+        <!-- C3P0 Connection Pool Settings -->
+        <property name="hibernate.c3p0.min_size">5</property>
+        <property name="hibernate.c3p0.max_size">20</property>
+        <property name="hibernate.c3p0.timeout">300</property>
+        <property name="hibernate.c3p0.max_statements">50</property>
+        <property name="hibernate.c3p0.idle_test_period">3000</property>
+
+        <!-- Show SQL -->
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+
+        <!-- HBM2DDL: create-drop, create, update, validate -->
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+        <!-- Mapping Resources -->
+        <mapping class="member3.entity.Car"/>
+        <mapping class="member3.entity.CarProducer"/>
+    </session-factory>
+</hibernate-configuration>

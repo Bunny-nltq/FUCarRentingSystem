@@ -1,0 +1,43 @@
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Maven
+target/
+*.jar
+*.war
+*.ear
+dependency-reduced-pom.xml
+.m2/
+
+# Gradle
+.gradle/
+build/
+*.gradle
+
+# Compilation
+*.class
+*.classpath
+.settings/
+
+# Logs
+*.log
+logs/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Project
+.project
+.classpath
+.c9/
+*.sublime-project
+*.sublime-workspace
+
+# Temp
+*.tmp
