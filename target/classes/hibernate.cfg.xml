@@ -4,18 +4,19 @@
 
         <!-- ✅ Kết nối MySQL -->
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/FUCarRentingSystemDB?useSSL=false&amp;serverTimezone=UTC</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3307/FUCarRentingSystemDB?useSSL=false&amp;serverTimezone=UTC</property>
         <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.connection.password"></property>
+        <property name="hibernate.connection.password">123456</property>
 
-        <!-- ✅ Cấu hình Hibernate -->
+         <!-- Hibernate settings -->
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-        <property name="hibernate.hbm2ddl.auto">update</property>
-        <property name="hibernate.show_sql">true</property>
-        <property name="hibernate.format_sql">true</property>
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+        <property name="hbm2ddl.auto">update</property>
 
-        <!-- ✅ Entity có thực -->
+        <!-- Khai báo Entity -->
         <mapping class="com.fucar.entity.Car"/>
         <mapping class="com.fucar.entity.CarProducer"/>
+
     </session-factory>
 </hibernate-configuration>

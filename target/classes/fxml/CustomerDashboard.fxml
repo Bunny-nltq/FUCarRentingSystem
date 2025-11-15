@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<VBox alignment="TOP_CENTER" spacing="20"
+      xmlns="http://javafx.com/javafx/20"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fucar.gui.controller.CustomerDashboardController"
+      stylesheets="@../css/style.css">
+
+    <Label text="Customer Dashboard" />
+
+    <HBox spacing="15" alignment="CENTER">
+        <Button fx:id="btnBrowseCars" text="Browse Cars" />
+        <Button fx:id="btnMyRentals" text="My Rentals" />
+        <Button fx:id="btnMyReviews" text="My Reviews" />
+    </HBox>
+
+</VBox>

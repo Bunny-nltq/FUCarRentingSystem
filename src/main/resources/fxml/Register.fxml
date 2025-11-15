@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="15"
+      xmlns="http://javafx.com/javafx/20"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fucar.gui.controller.RegisterController"
+      stylesheets="@../css/style.css">
+
+    <Label text="Register" />
+
+    <TextField fx:id="txtEmail" promptText="Email" />
+    <PasswordField fx:id="txtPassword" promptText="Password" />
+    <PasswordField fx:id="txtConfirmPassword" promptText="Confirm Password" />
+
+    <Button fx:id="btnRegister" text="Register" />
+    <Button fx:id="btnGoLogin" text="Go to Login" />
+
+</VBox>

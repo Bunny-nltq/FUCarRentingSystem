@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<VBox alignment="TOP_CENTER" spacing="20"
+      xmlns="http://javafx.com/javafx/20"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fucar.gui.controller.AdminDashboardController"
+      stylesheets="@../css/style.css">
+
+    <Label text="Admin Dashboard" />
+
+    <HBox spacing="15" alignment="CENTER">
+        <Button fx:id="btnCarManagement" text="Manage Cars" />
+        <Button fx:id="btnCustomerManagement" text="Manage Customers" />
+        <Button fx:id="btnRentalManagement" text="Manage Rentals" />
+        <Button fx:id="btnReviewManagement" text="Reviews" />
+    </HBox>
+
+</VBox>
