@@ -10,6 +10,9 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer accountId;
 
+    @Column(name = "AccountName", nullable = false)
+    private String accountName;
+
     @Column(nullable = false, unique = true)
     private String email;
 
@@ -19,18 +22,27 @@ public class Account {
     @Column(nullable = false)
     private String role; // "ADMIN" hoặc "CUSTOMER"
 
-    @OneToOne(mappedBy = "account")
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Customer customer;
 
-    public Account() {}
+    // =========================
+    // Constructors
+    // =========================
 
-    public Account(String email, String passwordHash, String role) {
+    public Account() {
+        // Hibernate cần constructor không tham số
+    }
+
+    public Account(String email, String passwordHash, String role, String accountName) {
         this.email = email;
         this.passwordHash = passwordHash;
         this.role = role;
+        this.accountName = accountName;
     }
 
-    // GETTER - SETTER
+    // =========================
+    // Getters
+    // =========================
 
     public Integer getAccountId() {
         return accountId;
@@ -40,27 +52,47 @@ public class Account {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getPasswordHash() {
         return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
     }
 
     public String getRole() {
         return role;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public String getAccountName() {
+        return accountName;
     }
 
     public Customer getCustomer() {
         return customer;
+    }
+
+    // =========================
+    // Setters
+    // =========================
+
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }

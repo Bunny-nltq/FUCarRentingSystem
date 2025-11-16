@@ -124,6 +124,19 @@ public class CarRental {
     }
 
     // ============================
+    // Additional helper methods
+    // ============================
+
+    // Các method này giúp controller/service gọi trực tiếp mà không lỗi
+    public Integer getCustomerID() {
+        return customer != null ? customer.getCustomerID() : null;
+    }
+
+    public Integer getCarID() {
+        return car != null ? car.getCarID() : null;
+    }
+
+    // ============================
     // Safe toString (không đụng lazy)
     // ============================
 
@@ -131,8 +144,8 @@ public class CarRental {
     public String toString() {
         return "CarRental{" +
                 "rentalID=" + rentalID +
-                ", customerID=" + (customer != null ? customer.getCustomerID() : null) +
-                ", carID=" + (car != null ? car.getCarID() : null) +
+                ", customerID=" + getCustomerID() +
+                ", carID=" + getCarID() +
                 ", pickupDate=" + pickupDate +
                 ", returnDate=" + returnDate +
                 ", rentPrice=" + rentPrice +

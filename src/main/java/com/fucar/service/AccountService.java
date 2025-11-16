@@ -37,11 +37,13 @@ public class AccountService {
         return null;
     }
 
-    public boolean register(String email, String password, String role) {
+    public boolean register(String email, String password, String role, String accountName) {
+        // Kiểm tra email đã tồn tại
         if (accountRepo.findByEmail(email) != null)
             return false;
 
-        Account newAcc = new Account(email, hashPassword(password), role);
+        // Tạo Account mới với accountName
+        Account newAcc = new Account(email, hashPassword(password), role, accountName);
         accountRepo.save(newAcc);
         return true;
     }

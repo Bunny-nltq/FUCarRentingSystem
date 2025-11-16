@@ -1,23 +1,46 @@
 package com.fucar.entity;
 
 import jakarta.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "CarProducer")
 public class CarProducer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer producerID;
 
     @Column(nullable = false)
-    private String producerName;
+    private String name;
 
-    private String address;
-    private String country;
+    public CarProducer() {}
 
-    @OneToMany(mappedBy = "producer", cascade = CascadeType.ALL)
-    private List<Car> cars;
+    public CarProducer(String name) {
+        this.name = name;
+    }
 
-    // getters & setters
+    // =========================== Getters & Setters ===========================
+    public Integer getProducerID() {
+        return producerID;
+    }
+
+    public void setProducerID(Integer producerID) {
+        this.producerID = producerID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "CarProducer{" +
+                "producerID=" + producerID +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

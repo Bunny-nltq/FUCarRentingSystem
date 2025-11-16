@@ -10,11 +10,15 @@
 
     <Label text="Register" />
 
+    <!-- Account Name -->
+    <TextField fx:id="txtAccountName" promptText="Account Name" />
+
     <TextField fx:id="txtEmail" promptText="Email" />
     <PasswordField fx:id="txtPassword" promptText="Password" />
     <PasswordField fx:id="txtConfirmPassword" promptText="Confirm Password" />
 
-    <Button fx:id="btnRegister" text="Register" onAction="#handleRegister" />
+    <!-- REMOVE onAction nếu bạn đã gán trong controller -->
+    <Button fx:id="btnRegister" text="Register" />
     <Button fx:id="btnGoLogin" text="Go to Login" />
 
 </VBox>

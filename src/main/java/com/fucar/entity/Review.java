@@ -98,6 +98,18 @@ public class Review {
     }
 
     // ============================
+    // Helper methods for controller/service
+    // ============================
+
+    public Integer getCustomerID() {
+        return customer != null ? customer.getCustomerID() : null;
+    }
+
+    public Integer getCarID() {
+        return car != null ? car.getCarID() : null;
+    }
+
+    // ============================
     // Safe toString (tránh lỗi lazy)
     // ============================
 
@@ -105,8 +117,8 @@ public class Review {
     public String toString() {
         return "Review{" +
                 "reviewID=" + reviewID +
-                ", customerID=" + (customer != null ? customer.getCustomerID() : null) +
-                ", carID=" + (car != null ? car.getCarID() : null) +
+                ", customerID=" + getCustomerID() +
+                ", carID=" + getCarID() +
                 ", reviewStar=" + reviewStar +
                 ", comment='" + comment + '\'' +
                 ", createdAt=" + createdAt +

@@ -27,9 +27,14 @@ public class Customer {
         this.account = account;
     }
 
-    // GETTER - SETTER
+    // ================= GETTERS =================
 
-    public Integer getCustomerId() {
+    // Method mà controller gọi: getCustomerID()
+    public Integer getCustomerID() {
+        return customerId;
+    }
+
+    public Integer getCustomerId() { // vẫn giữ theo Java convention
         return customerId;
     }
 
@@ -37,27 +42,36 @@ public class Customer {
         return fullName;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
     public String getPhone() {
         return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public String getAddress() {
         return address;
     }
 
+    public Account getAccount() {
+        return account;
+    }
+
+    // ================= SETTERS =================
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public void setAddress(String address) {
         this.address = address;
     }
 
-    public Account getAccount() {
-        return account;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }

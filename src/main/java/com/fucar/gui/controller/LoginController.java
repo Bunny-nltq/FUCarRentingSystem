@@ -2,7 +2,7 @@ package com.fucar.gui.controller;
 
 import com.fucar.MainApp;
 import com.fucar.entity.Account;
-import com.fucar.Service.AccountService;
+import com.fucar.service.AccountService;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;

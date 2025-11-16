@@ -15,26 +15,17 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) {
         this.primaryStage = stage;
-        // Mở màn hình Login mặc định
-        showLogin();
+        showLogin(); // Mở màn hình Login mặc định
     }
 
     // ===================== LOGIN =====================
     public void showLogin() {
-        loadScreenWithController(
-                "/fxml/Login.fxml",
-                "Login",
-                LoginController.class
-        );
+        loadScreenWithController("/fxml/Login.fxml", "Login", LoginController.class);
     }
 
     // ===================== REGISTER =====================
     public void showRegister() {
-        loadScreenWithController(
-                "/fxml/Register.fxml",
-                "Register",
-                RegisterController.class
-        );
+        loadScreenWithController("/fxml/Register.fxml", "Register", RegisterController.class);
     }
 
     // ===================== DASHBOARDS =====================
@@ -64,43 +55,66 @@ public class MainApp extends Application {
     }
 
     // ===================== HÀM CHUNG LOAD SCREEN =====================
-    // Load screen với controller (Login & Register)
+
+    /**
+     * Load screen có controller (Login, Register)
+     */
     private <T> void loadScreenWithController(String fxmlPath, String title, Class<T> controllerClass) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
 
-            // truyền MainApp vào controller
+            // truyền MainApp vào controller (nếu có method setMainApp)
             T controller = loader.getController();
-            controllerClass.getMethod("setMainApp", MainApp.class).invoke(controller, this);
+            try {
+                controllerClass.getMethod("setMainApp", MainApp.class).invoke(controller, this);
+            } catch (NoSuchMethodException ignored) {
+                // Controller không có setMainApp thì bỏ qua
+            }
 
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+            addCss(scene, "/css/style.css");
 
             primaryStage.setTitle(title);
             primaryStage.setScene(scene);
             primaryStage.show();
 
         } catch (Exception e) {
+            System.err.println("Lỗi khi load FXML: " + fxmlPath);
             e.printStackTrace();
         }
     }
 
-    // Load screen không cần truyền controller
+    /**
+     * Load screen bình thường không cần controller
+     */
     private void loadScreen(String fxmlPath, String title) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             Parent root = loader.load();
 
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+            addCss(scene, "/css/style.css");
 
             primaryStage.setTitle(title);
             primaryStage.setScene(scene);
             primaryStage.show();
 
         } catch (Exception e) {
+            System.err.println("Lỗi khi load FXML: " + fxmlPath);
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Thêm CSS vào scene
+     */
+    private void addCss(Scene scene, String cssPath) {
+        try {
+            String css = getClass().getResource(cssPath).toExternalForm();
+            scene.getStylesheets().add(css);
+        } catch (Exception e) {
+            System.err.println("Không tìm thấy CSS: " + cssPath);
         }
     }
 
