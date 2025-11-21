@@ -8,6 +8,7 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "AccountID")
     private Integer accountId;
 
     @Column(name = "AccountName", nullable = false)
@@ -16,11 +17,12 @@ public class Account {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    // ĐÚNG 100%: Khớp với table Account.PasswordHash
+    @Column(name = "PasswordHash", nullable = false)
     private String passwordHash;
 
     @Column(nullable = false)
-    private String role; // "ADMIN" hoặc "CUSTOMER"
+    private String role; // ADMIN / CUSTOMER
 
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Customer customer;
@@ -29,9 +31,7 @@ public class Account {
     // Constructors
     // =========================
 
-    public Account() {
-        // Hibernate cần constructor không tham số
-    }
+    public Account() {}
 
     public Account(String email, String passwordHash, String role, String accountName) {
         this.email = email;

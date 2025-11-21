@@ -13,7 +13,7 @@
     <HBox spacing="15" alignment="CENTER">
         <Button fx:id="btnBrowseCars" text="Browse Cars" />
         <Button fx:id="btnMyRentals" text="My Rentals" />
-        <Button fx:id="btnMyReviews" text="My Reviews" />
+        <Button fx:id="btnMyProfile" text="My Profile" />
     </HBox>
 
 </VBox>

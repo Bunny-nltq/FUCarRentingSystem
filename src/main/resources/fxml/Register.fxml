@@ -2,23 +2,38 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="15"
+<VBox alignment="CENTER" spacing="12"
       xmlns="http://javafx.com/javafx/20"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.fucar.gui.controller.RegisterController"
-      stylesheets="@../css/style.css">
+      stylesheets="@../css/style.css"
+      prefWidth="350">
 
-    <Label text="Register" />
+    <Label text="Register"
+           style="-fx-font-size: 20px; -fx-font-weight: bold;" />
 
-    <!-- Account Name -->
-    <TextField fx:id="txtAccountName" promptText="Account Name" />
+    <TextField fx:id="txtAccountName"
+               promptText="Account Name"
+               maxWidth="250"/>
 
-    <TextField fx:id="txtEmail" promptText="Email" />
-    <PasswordField fx:id="txtPassword" promptText="Password" />
-    <PasswordField fx:id="txtConfirmPassword" promptText="Confirm Password" />
+    <TextField fx:id="txtEmail"
+               promptText="Email"
+               maxWidth="250"/>
 
-    <!-- REMOVE onAction nếu bạn đã gán trong controller -->
-    <Button fx:id="btnRegister" text="Register" />
-    <Button fx:id="btnGoLogin" text="Go to Login" />
+    <PasswordField fx:id="txtPassword"
+                   promptText="Password"
+                   maxWidth="250"/>
+
+    <PasswordField fx:id="txtConfirmPassword"
+                   promptText="Confirm Password"
+                   maxWidth="250"/>
+
+    <Button fx:id="btnRegister"
+            text="Register"
+            maxWidth="200"/>
+
+    <Button fx:id="btnGoLogin"
+            text="Go to Login"
+            maxWidth="200"/>
 
 </VBox>

@@ -17,3 +17,4 @@
     <Button fx:id="btnGoRegister" text="Go to Register" onAction="#goRegister" />
 
 </VBox>
+

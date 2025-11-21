@@ -8,70 +8,94 @@ public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer customerId;
+    @Column(name = "CustomerID")
+    private Integer customerID;
 
-    private String fullName;
-    private String phone;
-    private String address;
+    @Column(name = "CustomerName")
+    private String customerName;
+
+    @Column(name = "Mobile")
+    private String mobile;
+
+    @Column(name = "Birthday")
+    private String birthday;
+
+    @Column(name = "IdentityCard")
+    private String identityCard;
+
+    @Column(name = "LicenceNumber")
+    private String licenceNumber;
+
+    @Column(name = "LicenceDate")
+    private String licenceDate;
+
+    @Column(name = "Email")
+    private String email;
+
+    @Column(name = "Password")
+    private String password;
 
     @OneToOne
-    @JoinColumn(name = "accountId")
+    @JoinColumn(name = "AccountID", nullable = false)
     private Account account;
 
     public Customer() {}
 
-    public Customer(String fullName, String phone, String address, Account account) {
-        this.fullName = fullName;
-        this.phone = phone;
-        this.address = address;
-        this.account = account;
-    }
+    // GETTERS & SETTERS
 
-    // ================= GETTERS =================
+    public Integer getCustomerID() { return customerID; }
+    public void setCustomerID(Integer customerID) { this.customerID = customerID; }
 
-    // Method mà controller gọi: getCustomerID()
-    public Integer getCustomerID() {
-        return customerId;
-    }
+    public String getCustomerName() { return customerName; }
+    public void setCustomerName(String customerName) { this.customerName = customerName; }
 
-    public Integer getCustomerId() { // vẫn giữ theo Java convention
-        return customerId;
-    }
+    public String getMobile() { return mobile; }
+    public void setMobile(String mobile) { this.mobile = mobile; }
+
+    public String getBirthday() { return birthday; }
+    public void setBirthday(String birthday) { this.birthday = birthday; }
+
+    public String getIdentityCard() { return identityCard; }
+    public void setIdentityCard(String identityCard) { this.identityCard = identityCard; }
+
+    public String getLicenceNumber() { return licenceNumber; }
+    public void setLicenceNumber(String licenceNumber) { this.licenceNumber = licenceNumber; }
+
+    public String getLicenceDate() { return licenceDate; }
+    public void setLicenceDate(String licenceDate) { this.licenceDate = licenceDate; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+
+    public Account getAccount() { return account; }
+    public void setAccount(Account account) { this.account = account; }
+
+    // ============== SUPPORT FOR PROFILE UI ==============
 
     public String getFullName() {
-        return fullName;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    // ================= SETTERS =================
-    public void setCustomerId(Integer customerId) {
-        this.customerId = customerId;
+        return customerName;
     }
 
     public void setFullName(String fullName) {
-        this.fullName = fullName;
+        this.customerName = fullName;
+    }
+
+    public String getPhone() {
+        return mobile;
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+        this.mobile = phone;
+    }
+
+    public String getAddress() {
+        return identityCard; // TẠM dùng IdentityCard làm address
     }
 
     public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
+        this.identityCard = address;
     }
 }

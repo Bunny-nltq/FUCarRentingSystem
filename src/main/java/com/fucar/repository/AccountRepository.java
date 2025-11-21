@@ -7,29 +7,27 @@ import org.hibernate.Transaction;
 
 public class AccountRepository {
 
-    /**
-     * Tìm tài khoản theo email
-     */
+    // Tìm account theo email
     public Account findByEmail(String email) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
-                    "FROM Account WHERE email = :email", Account.class
-            ).setParameter("email", email)
-             .uniqueResult();
+                    "FROM Account WHERE email = :email",
+                    Account.class
+            )
+            .setParameter("email", email)
+            .uniqueResult();
         } catch (Exception e) {
             System.err.println("Error findByEmail: " + e.getMessage());
             return null;
         }
     }
 
-    /**
-     * Lưu tài khoản mới
-     */
-    public void save(Account account) {
+    // Lưu Account mới
+    public void save(Account acc) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
-            session.persist(account);
+            session.persist(acc);
             tx.commit();
         } catch (Exception e) {
             if (tx != null) tx.rollback();
@@ -37,14 +35,12 @@ public class AccountRepository {
         }
     }
 
-    /**
-     * Update tài khoản (phòng khi sau này cần đổi mật khẩu)
-     */
-    public void update(Account account) {
+    // Update Account
+    public void update(Account acc) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
-            session.merge(account);
+            session.merge(acc);
             tx.commit();
         } catch (Exception e) {
             if (tx != null) tx.rollback();
