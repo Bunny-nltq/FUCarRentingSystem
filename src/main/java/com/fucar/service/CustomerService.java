@@ -11,7 +11,7 @@ public class CustomerService {
     private final CustomerRepository repo = new CustomerRepository();
 
     // =====================================================
-    // CRUD CƠ BẢN
+    // CRUD
     // =====================================================
 
     public void addCustomer(Customer customer) {
@@ -35,17 +35,7 @@ public class CustomerService {
     }
 
     // =====================================================
-    // CHECK EMAIL — email trong bảng CUSTOMER
-    // (chỉ dùng nếu login kiểu cũ, hiện bạn KHÔNG dùng)
-    // =============================================   ========
-
-    public boolean isEmailTaken(String email) {
-        return repo.findByEmail(email) != null;
-    }
-
-    // =====================================================
-    // DÙNG SAU KHI LOGIN ACCOUNT
-    // Lấy Customer dựa trên AccountID
+    // FIND BY ACCOUNT ID (Login)
     // =====================================================
 
     public Customer findByAccountId(int accountId) {
@@ -53,28 +43,26 @@ public class CustomerService {
     }
 
     // =====================================================
-    // HÀM QUAN TRỌNG — TẠO CUSTOMER MẶC ĐỊNH SAU KHI ĐĂNG KÝ ACCOUNT
+    // TẠO CUSTOMER MẶC ĐỊNH (nếu dùng register)
     // =====================================================
 
     public Customer createDefaultCustomer(Account account) {
 
         Customer c = new Customer();
 
-        // Nếu bảng Customer có Email riêng → copy từ Account
+        c.setAccount(account);
         c.setEmail(account.getEmail());
+        c.setCustomerName(account.getAccountName());
 
-        // Các trường còn lại tạm để trống hoặc “N/A”
-        c.setCustomerName(account.getAccountName());   // tên mặc định
+        // Các trường NOT NULL
         c.setMobile("N/A");
-        c.setAddress("N/A");
-        c.setBirthday(null);
+        c.setPassword("123456");
+
+        // Optional
         c.setIdentityCard("N/A");
         c.setLicenceNumber("N/A");
+        c.setBirthday(null);
         c.setLicenceDate(null);
-        c.setPassword("N/A");
-
-        // RẤT QUAN TRỌNG: Gắn Account →
-        c.setAccount(account);
 
         repo.save(c);
 

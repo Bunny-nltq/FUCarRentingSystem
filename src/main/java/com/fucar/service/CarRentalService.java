@@ -51,6 +51,10 @@ public class CarRentalService {
         if (days <= 0) days = 1;
         return days * car.getPricePerDay();
     }
+    public boolean existsByCustomerId(Integer customerId) {
+        return repo.existsByCustomerId(customerId);
+    }
+
 
     // Repository wrappers
     public List<CarRental> getAll() { return repo.findAll(); }

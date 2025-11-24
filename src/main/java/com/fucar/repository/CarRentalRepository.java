@@ -83,4 +83,18 @@ public class CarRentalRepository {
         session.close();
         return list;
     }
+ // Kiểm tra khách hàng đã từng thuê xe chưa
+    public boolean existsByCustomerId(Integer customerId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Long count = session.createQuery(
+                "select count(c) from CarRental c where c.customer.customerID = :cid",
+                Long.class
+        )
+        .setParameter("cid", customerId)
+        .uniqueResult();
+
+        session.close();
+        return count != null && count > 0;
+    }
+
 }

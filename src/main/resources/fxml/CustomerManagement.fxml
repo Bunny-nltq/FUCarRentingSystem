@@ -8,21 +8,24 @@
       fx:controller="com.fucar.gui.controller.CustomerManagementController"
       stylesheets="@../css/style.css">
 
-    <Label text="Customer Management" />
+    <Label text="Customer Management"
+           style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
 
     <TableView fx:id="customerTable" prefWidth="600" prefHeight="300">
+
         <columns>
-            <TableColumn text="ID" prefWidth="50" />
-            <TableColumn text="Name" prefWidth="150" />
-            <TableColumn text="Email" prefWidth="200" />
-            <TableColumn text="Phone" prefWidth="150" />
+            <TableColumn fx:id="colID" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="colName" text="Name" prefWidth="150"/>
+            <TableColumn fx:id="colEmail" text="Email" prefWidth="200"/>
+            <TableColumn fx:id="colPhone" text="Phone" prefWidth="150"/>
         </columns>
+
     </TableView>
 
     <HBox spacing="10" alignment="CENTER">
-        <Button fx:id="btnAddCustomer" text="Add Customer" />
-        <Button fx:id="btnEditCustomer" text="Edit Customer" />
-        <Button fx:id="btnDeleteCustomer" text="Delete Customer" />
+        <Button fx:id="btnAddCustomer" text="Add Customer"/>
+        <Button fx:id="btnEditCustomer" text="Edit Customer"/>
+        <Button fx:id="btnDeleteCustomer" text="Delete Customer"/>
     </HBox>
 
 </VBox>

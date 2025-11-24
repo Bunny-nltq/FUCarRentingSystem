@@ -7,6 +7,7 @@ import com.fucar.service.AccountService;
 import com.fucar.service.CustomerService;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
@@ -30,14 +31,19 @@ public class LoginController {
     @FXML
     public void handleLogin() {
 
-        String email = txtEmail.getText();
-        String pass = txtPassword.getText();
+        String email = txtEmail.getText().trim();
+        String pass = txtPassword.getText().trim();
+
+        if (email.isEmpty() || pass.isEmpty()) {
+            showError("Please enter email & password.");
+            return;
+        }
 
         // Kiểm tra account
         Account acc = accountService.login(email, pass);
 
         if (acc == null) {
-            System.out.println("❌ Sai tài khoản hoặc mật khẩu");
+            showError("❌ Sai tài khoản hoặc mật khẩu");
             return;
         }
 
@@ -46,30 +52,37 @@ public class LoginController {
         // ========================
         // PHÂN QUYỀN
         // ========================
-        if (acc.getRole().equalsIgnoreCase("ADMIN")) {
-            mainApp.showAdminDashboard();
+        if (acc.getRole() != null && acc.getRole().equalsIgnoreCase("ADMIN")) {
+            System.out.println("→ Admin login detected. Redirecting to Admin Dashboard...");
+            mainApp.showAdminDashboard();   // ⭐⭐ ĐIỀU HƯỚNG ADMIN Ở ĐÂY
             return;
         }
 
         // ========================
         // CUSTOMER LOGIN
         // ========================
-        Customer customer = customerService.findByAccountId(acc.getAccountId()); // HÀM NÀY PHẢI TỒN TẠI
+        Customer customer = customerService.findByAccountId(acc.getAccountId());
 
         if (customer == null) {
-            System.out.println("❌ Không tìm thấy Customer với AccountID = " + acc.getAccountId());
+            showError("❌ Không tìm thấy Customer có AccountID = " + acc.getAccountId());
             return;
         }
 
-        // Lấy ID đúng theo entity của bạn
         int customerId = customer.getCustomerID();
 
-        // Gửi sang MainApp → mở Dashboard và truyền customerId
+        System.out.println("→ Customer login. Redirecting to Customer Dashboard...");
         mainApp.showCustomerDashboard(customerId);
     }
 
     @FXML
     public void goRegister() {
         mainApp.showRegister();
+    }
+
+    private void showError(String msg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText("Login Failed");
+        alert.setContentText(msg);
+        alert.showAndWait();
     }
 }

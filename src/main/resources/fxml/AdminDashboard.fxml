@@ -1,20 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
 
-<VBox alignment="TOP_CENTER" spacing="20"
-      xmlns="http://javafx.com/javafx/20"
+<VBox xmlns="http://javafx.com/javafx/20"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.fucar.gui.controller.AdminDashboardController"
-      stylesheets="@../css/style.css">
+      alignment="TOP_CENTER"
+      spacing="25">
+ <padding>
+        <Insets top="30" right="30" bottom="30" left="30"/>
+    </padding>
+    <!-- TITLE -->
+    <Label text="ADMIN DASHBOARD"
+           style="-fx-font-size: 28px; -fx-font-weight: bold;"/>
 
-    <Label text="Admin Dashboard" />
+    <!-- BUTTON GROUP -->
+    <VBox spacing="15" alignment="CENTER">
 
-    <HBox spacing="15" alignment="CENTER">
-        <Button fx:id="btnCarManagement" text="Manage Cars" />
-        <Button fx:id="btnCustomerManagement" text="Manage Customers" />
-        <Button fx:id="btnRentalManagement" text="Manage Rentals" />
-        <Button fx:id="btnReviewManagement" text="Reviews" />
-    </HBox>
+        <Button fx:id="btnCustomerManagement"
+                text="Manage Customers"
+                style="-fx-padding: 12 40; -fx-font-size: 16;"/>
+
+        <Button fx:id="btnCarManagement"
+                text="Manage Cars"
+                style="-fx-padding: 12 40; -fx-font-size: 16;"/>
+
+        <Button fx:id="btnRentalManagement"
+                text="Manage Rentals"
+                style="-fx-padding: 12 40; -fx-font-size: 16;"/>
+
+        <Button fx:id="btnReportManagement"
+                text="Rental Reports"
+                style="-fx-padding: 12 40; -fx-font-size: 16;"/>
+
+        <Button fx:id="btnLogout"
+                text="Logout"
+                style="-fx-padding: 12 40; -fx-font-size: 16; -fx-background-color: #d9534f; -fx-text-fill: white;"/>
+    </VBox>
 
 </VBox>

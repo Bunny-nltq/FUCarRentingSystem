@@ -19,7 +19,7 @@ public class Customer {
     private String mobile;
 
     @Column(name = "Birthday")
-    private LocalDate birthday;   // ← Changed String → LocalDate
+    private LocalDate birthday;
 
     @Column(name = "IdentityCard")
     private String identityCard;
@@ -28,7 +28,7 @@ public class Customer {
     private String licenceNumber;
 
     @Column(name = "LicenceDate")
-    private LocalDate licenceDate;  // ← Changed String → LocalDate
+    private LocalDate licenceDate;
 
     @Column(name = "Email", nullable = false)
     private String email;
@@ -42,7 +42,7 @@ public class Customer {
 
     public Customer() {}
 
-    // ===================== GETTERS & SETTERS =====================
+    // Getters & Setters
 
     public Integer getCustomerID() { return customerID; }
     public void setCustomerID(Integer customerID) { this.customerID = customerID; }
@@ -73,30 +73,4 @@ public class Customer {
 
     public Account getAccount() { return account; }
     public void setAccount(Account account) { this.account = account; }
-
-    // ============== SUPPORT FOR PROFILE UI ==============
-
-    public String getFullName() {
-        return customerName;
-    }
-
-    public void setFullName(String fullName) {
-        this.customerName = fullName;
-    }
-
-    public String getPhone() {
-        return mobile;
-    }
-
-    public void setPhone(String phone) {
-        this.mobile = phone;
-    }
-
-    public String getAddress() {
-        return identityCard; // (temporary: using IdentityCard as address)
-    }
-
-    public void setAddress(String address) {
-        this.identityCard = address;
-    }
 }

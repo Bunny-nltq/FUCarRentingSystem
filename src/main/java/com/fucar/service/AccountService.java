@@ -13,7 +13,7 @@ public class AccountService {
     private final CustomerRepository customerRepo = new CustomerRepository();
 
     // ================================
-    // HASH PASSWORD (SHA-256)
+    // HASH PASSWORD
     // ================================
     public String hashPassword(String password) {
         try {
@@ -30,46 +30,59 @@ public class AccountService {
     }
 
     // ================================
+    // SAVE ACCOUNT
+    // ================================
+    public void save(Account acc) {
+        accountRepo.save(acc);
+    }
+
+    public void update(Account acc) {
+        accountRepo.update(acc);
+    }
+
+    // ================================
     // LOGIN
     // ================================
     public Account login(String email, String password) {
 
         Account acc = accountRepo.findByEmail(email);
-        if (acc == null) return null; // Email không tồn tại
+        if (acc == null) return null;
 
         String hash = hashPassword(password);
 
-        if (!acc.getPasswordHash().equals(hash)) {
-            return null; // Sai mật khẩu
-        }
+        if (!acc.getPasswordHash().equals(hash)) return null;
 
-        return acc; // Đăng nhập thành công
+        return acc;
     }
 
     // ================================
-    // REGISTER (TẠO ACCOUNT + CUSTOMER)
+    // REGISTER
     // ================================
     public boolean register(String email, String password, String role, String accountName) {
 
-        // Check tồn tại email
         if (accountRepo.findByEmail(email) != null)
             return false;
 
-        // Tạo Account
-        Account newAcc = new Account(
-                email,
-                hashPassword(password),
-                role.toUpperCase(),
-                accountName
-        );
+        Account newAcc = new Account(email, hashPassword(password), role, accountName);
 
         accountRepo.save(newAcc);
 
-        // Nếu tạo CUSTOMER → phải tạo Customer tương ứng
         if (role.equalsIgnoreCase("CUSTOMER")) {
+
             Customer c = new Customer();
-            c.setAccount(newAcc);      // Gắn AccountID
-            c.setEmail(email);         // Đồng bộ email
+
+            c.setAccount(newAcc);
+            c.setEmail(email);
+
+            c.setCustomerName(accountName);
+            c.setMobile("N/A");
+            c.setPassword("123456");
+
+            c.setIdentityCard("N/A");
+            c.setLicenceNumber("N/A");
+            c.setBirthday(null);
+            c.setLicenceDate(null);
+
             customerRepo.save(c);
         }
 
