@@ -98,10 +98,10 @@ public class RegisterController {
 
         // Vì đề yêu cầu tất cả field NOT NULL → phải cấp giá trị mặc định
         customer.setMobile("N/A");
-        customer.setBirthday("N/A");
+        customer.setBirthday(null);
         customer.setIdentityCard("N/A");
         customer.setLicenceNumber("N/A");
-        customer.setLicenceDate("N/A");
+        customer.setLicenceDate(null);
 
         // Nếu không dùng password trong Customer → nhưng cột NOT NULL → gán mặc định
         customer.setPassword("default");

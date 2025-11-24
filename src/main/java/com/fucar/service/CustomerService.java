@@ -37,7 +37,7 @@ public class CustomerService {
     // =====================================================
     // CHECK EMAIL — email trong bảng CUSTOMER
     // (chỉ dùng nếu login kiểu cũ, hiện bạn KHÔNG dùng)
-    // =====================================================
+    // =============================================   ========
 
     public boolean isEmailTaken(String email) {
         return repo.findByEmail(email) != null;
@@ -67,10 +67,10 @@ public class CustomerService {
         c.setCustomerName(account.getAccountName());   // tên mặc định
         c.setMobile("N/A");
         c.setAddress("N/A");
-        c.setBirthday("N/A");
+        c.setBirthday(null);
         c.setIdentityCard("N/A");
         c.setLicenceNumber("N/A");
-        c.setLicenceDate("N/A");
+        c.setLicenceDate(null);
         c.setPassword("N/A");
 
         // RẤT QUAN TRỌNG: Gắn Account →

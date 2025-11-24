@@ -1,6 +1,7 @@
 package com.fucar.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "Customer")
@@ -11,14 +12,14 @@ public class Customer {
     @Column(name = "CustomerID")
     private Integer customerID;
 
-    @Column(name = "CustomerName")
+    @Column(name = "CustomerName", nullable = false)
     private String customerName;
 
-    @Column(name = "Mobile")
+    @Column(name = "Mobile", nullable = false)
     private String mobile;
 
     @Column(name = "Birthday")
-    private String birthday;
+    private LocalDate birthday;   // ← Changed String → LocalDate
 
     @Column(name = "IdentityCard")
     private String identityCard;
@@ -27,12 +28,12 @@ public class Customer {
     private String licenceNumber;
 
     @Column(name = "LicenceDate")
-    private String licenceDate;
+    private LocalDate licenceDate;  // ← Changed String → LocalDate
 
-    @Column(name = "Email")
+    @Column(name = "Email", nullable = false)
     private String email;
 
-    @Column(name = "Password")
+    @Column(name = "Password", nullable = false)
     private String password;
 
     @OneToOne
@@ -41,7 +42,7 @@ public class Customer {
 
     public Customer() {}
 
-    // GETTERS & SETTERS
+    // ===================== GETTERS & SETTERS =====================
 
     public Integer getCustomerID() { return customerID; }
     public void setCustomerID(Integer customerID) { this.customerID = customerID; }
@@ -52,8 +53,8 @@ public class Customer {
     public String getMobile() { return mobile; }
     public void setMobile(String mobile) { this.mobile = mobile; }
 
-    public String getBirthday() { return birthday; }
-    public void setBirthday(String birthday) { this.birthday = birthday; }
+    public LocalDate getBirthday() { return birthday; }
+    public void setBirthday(LocalDate birthday) { this.birthday = birthday; }
 
     public String getIdentityCard() { return identityCard; }
     public void setIdentityCard(String identityCard) { this.identityCard = identityCard; }
@@ -61,8 +62,8 @@ public class Customer {
     public String getLicenceNumber() { return licenceNumber; }
     public void setLicenceNumber(String licenceNumber) { this.licenceNumber = licenceNumber; }
 
-    public String getLicenceDate() { return licenceDate; }
-    public void setLicenceDate(String licenceDate) { this.licenceDate = licenceDate; }
+    public LocalDate getLicenceDate() { return licenceDate; }
+    public void setLicenceDate(LocalDate licenceDate) { this.licenceDate = licenceDate; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
@@ -92,7 +93,7 @@ public class Customer {
     }
 
     public String getAddress() {
-        return identityCard; // TẠM dùng IdentityCard làm address
+        return identityCard; // (temporary: using IdentityCard as address)
     }
 
     public void setAddress(String address) {
