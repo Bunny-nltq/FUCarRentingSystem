@@ -9,7 +9,8 @@
       stylesheets="@../css/style.css">
 
     <Label text="Login" />
-
+    
+    
     <TextField fx:id="txtEmail" promptText="Email" />
     <PasswordField fx:id="txtPassword" promptText="Password" />
 

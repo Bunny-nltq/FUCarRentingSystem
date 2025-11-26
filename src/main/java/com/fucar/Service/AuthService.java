@@ -1,57 +1,67 @@
-package com.fucar.Service;
+package com.fucar.service;
 
 import com.fucar.entity.Account;
-import com.fucar.repository.AccountRepository;
-
-import java.security.MessageDigest;
+import com.fucar.util.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 public class AuthService {
 
-    private final AccountRepository accountRepo = new AccountRepository();
+    // Phương thức cũ
+    public boolean register(String email, String accountName, String password, String role) {
+        // Kiểm tra email đã tồn tại chưa
+        if (getAccountByEmail(email) != null) {
+            return false;
+        }
+        Account acc = new Account();
+        acc.setAccountName(accountName);
+        acc.setEmail(email);
+        acc.setPasswordHash(password); // nên hash password ở thực tế
+        acc.setRole(role);
 
-    /**
-     * Hash mật khẩu bằng SHA-256
-     */
-    public String hashPassword(String password) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hash = md.digest(password.getBytes("UTF-8"));
-            StringBuilder sb = new StringBuilder();
-            for (byte b : hash) sb.append(String.format("%02x", b));
-            return sb.toString();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            session.save(acc);
+            tx.commit();
+            return true;
         } catch (Exception e) {
-            throw new RuntimeException("Hash password error", e);
+            e.printStackTrace();
+            return false;
         }
     }
 
-    /**
-     * Login bằng email + password
-     */
-    public Account login(String email, String password) {
-        Account acc = accountRepo.findByEmail(email);
-        if (acc == null) return null;
-
-        String hashed = hashPassword(password);
-        if (acc.getPasswordHash().equals(hashed)) {
-            return acc;
+    // Phương thức mới: trả về Account vừa tạo
+    public Account registerAndReturnAccount(String email, String accountName, String password, String role) {
+        // Kiểm tra email đã tồn tại chưa
+        if (getAccountByEmail(email) != null) {
+            return null;
         }
-        return null;
+        Account acc = new Account();
+        acc.setAccountName(accountName);
+        acc.setEmail(email);
+        acc.setPasswordHash(password);
+        acc.setRole(role);
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            session.save(acc);
+            tx.commit();
+            return acc; // trả về đối tượng Account vừa tạo
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    /**
-     * Register tài khoản mới
-     */
-    public boolean register(String email, String password, String role) {
-        if (accountRepo.findByEmail(email) != null) {
-            return false; // Email đã tồn tại
+    // Lấy account theo email
+    public Account getAccountByEmail(String email) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM Account WHERE email = :email", Account.class)
+                    .setParameter("email", email)
+                    .uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-
-        Account newAcc = new Account();
-        newAcc.setEmail(email);
-        newAcc.setPasswordHash(hashPassword(password));
-        newAcc.setRole(role.toUpperCase());
-
-        accountRepo.save(newAcc);
-        return true;
     }
 }

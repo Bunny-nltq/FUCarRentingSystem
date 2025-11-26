@@ -1,26 +1,39 @@
 package com.fucar.repository;
 
 import com.fucar.entity.Account;
-import com.fucar.util.HibernateUtil;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 
 public class AccountRepository {
 
+    private final EntityManagerFactory emf = Persistence.createEntityManagerFactory("FUCarPU");
+
     public Account findByEmail(String email) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery(
-                    "FROM Account WHERE email = :email", Account.class
-            ).setParameter("email", email).uniqueResult();
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.createQuery("SELECT a FROM Account a WHERE a.email = :email", Account.class)
+                     .setParameter("email", email)
+                     .getResultStream()
+                     .findFirst()
+                     .orElse(null);
+        } finally {
+            em.close();
         }
     }
 
     public void save(Account account) {
-        Transaction tx = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            tx = session.beginTransaction();
-            session.persist(account);
-            tx.commit();
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            if (account.getAccountID() == null) {
+                em.persist(account);
+            } else {
+                em.merge(account);
+            }
+            em.getTransaction().commit();
+        } finally {
+            em.close();
         }
     }
 }

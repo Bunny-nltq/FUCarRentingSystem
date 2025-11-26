@@ -1,66 +1,51 @@
 package com.fucar.entity;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Account")
 public class Account {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer accountId;
+    private Integer accountID;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+    @Column(nullable = false, unique = true, length = 100)
+    private String email; // dùng để login
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
+    private String accountName; // tên hiển thị
+
+    @Column(nullable = false, length = 255)
     private String passwordHash;
 
+    @Column(nullable = false, length = 20)
+    private String role; // ADMIN / CUSTOMER / STAFF
+
     @Column(nullable = false)
-    private String role; // "ADMIN" hoặc "CUSTOMER"
+    private Boolean isLocked = false;
 
-    @OneToOne(mappedBy = "account")
-    private Customer customer;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    public Account() {}
+    // getters & setters
+    public Integer getAccountID() { return accountID; }
+    public void setAccountID(Integer accountID) { this.accountID = accountID; }
 
-    public Account(String email, String passwordHash, String role) {
-        this.email = email;
-        this.passwordHash = passwordHash;
-        this.role = role;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    // GETTER - SETTER
+    public String getAccountName() { return accountName; }
+    public void setAccountName(String accountName) { this.accountName = accountName; }
 
-    public Integer getAccountId() {
-        return accountId;
-    }
+    public String getPasswordHash() { return passwordHash; }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public Boolean getIsLocked() { return isLocked; }
+    public void setIsLocked(Boolean isLocked) { this.isLocked = isLocked; }
 
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }

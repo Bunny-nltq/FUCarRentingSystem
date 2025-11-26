@@ -1,31 +1,24 @@
 package com.fucar.gui.controller;
 
 import com.fucar.MainApp;
-import com.fucar.Service.AuthService;
-
+import com.fucar.entity.Account;
+import com.fucar.service.AuthService;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextField;
-import javafx.scene.control.PasswordField;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 
 public class RegisterController {
 
     private MainApp mainApp;
 
-    @FXML
-    private TextField txtEmail;
-
-    @FXML
-    private PasswordField txtPassword;
-
-    @FXML
-    private PasswordField txtConfirmPassword;
-
-    @FXML
-    private Button btnRegister;
-
-    @FXML
-    private Button btnGoLogin;
+    @FXML private TextField txtAccountName;
+    @FXML private TextField txtEmail;
+    @FXML private PasswordField txtPassword;
+    @FXML private PasswordField txtConfirmPassword;
+    @FXML private Button btnRegister;
+    @FXML private Button btnGoLogin;
 
     public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
@@ -37,39 +30,55 @@ public class RegisterController {
         btnGoLogin.setOnAction(event -> mainApp.showLogin());
     }
 
-   
     @FXML
     public void handleRegister() {
+        String accountName = txtAccountName.getText().trim();
         String email = txtEmail.getText().trim();
         String password = txtPassword.getText().trim();
         String confirm = txtConfirmPassword.getText().trim();
 
-        // 1. Check password trùng
+        // 1. Validate trống
+        if (accountName.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Validation Error", "Name, Email and Password cannot be empty!");
+            return;
+        }
+
+        // 2. Validate email format
+        if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            showAlert(Alert.AlertType.WARNING, "Validation Error", "Invalid email format!");
+            return;
+        }
+
+        // 3. Check password trùng
         if (!password.equals(confirm)) {
-            System.out.println("Passwords do not match!");
+            showAlert(Alert.AlertType.WARNING, "Validation Error", "Passwords do not match!");
             return;
         }
 
-        // 2. Validate email trống
-        if (email.isEmpty() || password.isEmpty()) {
-            System.out.println("Email and password cannot be empty!");
+        // 4. Password tối thiểu 6 ký tự
+        if (password.length() < 6) {
+            showAlert(Alert.AlertType.WARNING, "Validation Error", "Password must be at least 6 characters!");
             return;
         }
 
-        // 3. Sử dụng AuthService để lưu user
+        // 5. Call AuthService
         AuthService authService = new AuthService();
-        boolean success = authService.register(email, password, "CUSTOMER"); // role mặc định CUSTOMER
+        Account account = authService.registerAndReturnAccount(email, accountName, password, "CUSTOMER");
 
-        if (success) {
-            System.out.println("Register successful! You can now login.");
-            try {
-            	mainApp.showCustomerDashboard();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if (account != null) {
+            showAlert(Alert.AlertType.INFORMATION, "Success", "Register successful! You can now login.");
+            // chuyển đến dashboard Customer với Account vừa tạo
+            mainApp.showCustomerDashboard(account);
         } else {
-            System.out.println("Email already exists. Try another one.");
+            showAlert(Alert.AlertType.ERROR, "Failed", "Email already exists. Try another one.");
         }
     }
 
+    private void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
 }

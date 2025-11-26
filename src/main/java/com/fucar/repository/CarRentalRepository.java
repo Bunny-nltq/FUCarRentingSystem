@@ -10,77 +10,97 @@ import java.util.List;
 
 public class CarRentalRepository {
 
+    // ===================== THÊM RENTAL =====================
     public void save(CarRental rental) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        session.persist(rental);
-        tx.commit();
-        session.close();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            session.persist(rental);
+            tx.commit();
+        }
     }
 
+    // ===================== CẬP NHẬT RENTAL =====================
     public void update(CarRental rental) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        session.merge(rental);
-        tx.commit();
-        session.close();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            session.merge(rental);
+            tx.commit();
+        }
     }
 
-    public void delete(Integer rentalID) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
-        CarRental rental = session.get(CarRental.class, rentalID);
-        if (rental != null) session.remove(rental);
-        tx.commit();
-        session.close();
+    // ===================== XÓA RENTAL =====================
+    public void delete(CarRental rental) {
+        if (rental == null || rental.getCar() == null) return;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            CarRental managedRental = session.get(CarRental.class, rental.getCar());
+            if (managedRental != null) {
+                session.remove(managedRental);
+            }
+            tx.commit();
+        }
     }
 
+    // ===================== TÌM THEO ID =====================
     public CarRental findById(Integer id) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        CarRental rental = session.get(CarRental.class, id);
-        session.close();
-        return rental;
+        if (id == null) return null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(CarRental.class, id);
+        }
     }
 
+    // ===================== LẤY TẤT CẢ =====================
     public List<CarRental> findAll() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        List<CarRental> list = session.createQuery("from CarRental", CarRental.class).list();
-        session.close();
-        return list;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("from CarRental", CarRental.class).list();
+        }
     }
 
-    // Tìm theo ngày thuê
+    // ===================== LỌC THEO NGÀY =====================
     public List<CarRental> filterByDate(LocalDate start, LocalDate end) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        List<CarRental> list = session.createQuery(
-                "from CarRental c where c.pickupDate >= :start and c.returnDate <= :end",
-                CarRental.class
-        )
-        .setParameter("start", start)
-        .setParameter("end", end)
-        .list();
-        session.close();
-        return list;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                    "from CarRental c where c.pickupDate >= :start and c.returnDate <= :end",
+                    CarRental.class
+            )
+            .setParameter("start", start)
+            .setParameter("end", end)
+            .list();
+        }
     }
 
-    // Sắp xếp
+    // ===================== SẮP XẾP =====================
     public List<CarRental> sortByPriceDesc() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        List<CarRental> list = session.createQuery(
-                "from CarRental c order by c.rentPrice desc",
-                CarRental.class
-        ).list();
-        session.close();
-        return list;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                    "from CarRental c order by c.rentPrice desc",
+                    CarRental.class
+            ).list();
+        }
     }
 
     public List<CarRental> sortByPickupDateDesc() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        List<CarRental> list = session.createQuery(
-                "from CarRental c order by c.pickupDate desc",
-                CarRental.class
-        ).list();
-        session.close();
-        return list;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                    "from CarRental c order by c.pickupDate desc",
+                    CarRental.class
+            ).list();
+        }
     }
+
+    // ===================== LẤY THEO ACCOUNT =====================
+    public List<CarRental> findByCustomerAccountId(Integer CustomerID) {
+        if (CustomerID == null) return List.of();
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                    "from CarRental c where c.customer.customerId = :CustomerID",
+                    CarRental.class
+            )
+            .setParameter("CustomerID", CustomerID)
+            .list();
+        }
+    }
+    
+    
+    
 }

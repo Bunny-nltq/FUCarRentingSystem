@@ -91,6 +91,11 @@
             <artifactId>slf4j-simple</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
+        <dependency>
+        	<groupId>fpt.edu.vn</groupId>
+        	<artifactId>HSF301_Chapter_01_Ex_02_ManyToOne</artifactId>
+        	<version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>

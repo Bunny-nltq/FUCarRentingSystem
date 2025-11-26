@@ -31,4 +31,18 @@ public class CustomerRepository {
             tx.commit();
         }
     }
+    
+    public Customer findByAccountId(Integer accountId) {
+        if (accountId == null) return null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                    "from Customer c where c.account.accountID = :accountID", Customer.class)
+                    .setParameter("accountId", accountId)
+                    .uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

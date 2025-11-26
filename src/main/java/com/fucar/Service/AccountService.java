@@ -1,4 +1,4 @@
-package com.fucar.Service;
+package com.fucar.service;
 
 import com.fucar.entity.Account;
 import com.fucar.repository.AccountRepository;
@@ -13,35 +13,39 @@ public class AccountService {
     public String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hash = md.digest(password.getBytes());
+            byte[] hash = md.digest(password.getBytes("UTF-8")); // chuẩn UTF-8
             StringBuilder sb = new StringBuilder();
-
             for (byte b : hash) sb.append(String.format("%02x", b));
-
             return sb.toString();
-
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Hash password error", e);
         }
     }
 
+    // Login bằng email + password
     public Account login(String email, String password) {
         Account acc = accountRepo.findByEmail(email);
         if (acc == null) return null;
 
-        String hash = hashPassword(password);
-
-        if (acc.getPasswordHash().equals(hash))
+        String hashed = hashPassword(password);
+        if (acc.getPasswordHash().equals(hashed)) {
             return acc;
-
+        }
         return null;
     }
 
-    public boolean register(String email, String password, String role) {
-        if (accountRepo.findByEmail(email) != null)
-            return false;
+    // Register tài khoản mới
+    public boolean register(String email, String accountName, String password, String role) {
+        if (accountRepo.findByEmail(email) != null) {
+            return false; // Email đã tồn tại
+        }
 
-        Account newAcc = new Account(email, hashPassword(password), role);
+        Account newAcc = new Account();
+        newAcc.setEmail(email);
+        newAcc.setAccountName(accountName);
+        newAcc.setPasswordHash(hashPassword(password));
+        newAcc.setRole(role.toUpperCase());
+
         accountRepo.save(newAcc);
         return true;
     }

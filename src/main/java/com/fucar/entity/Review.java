@@ -105,7 +105,7 @@ public class Review {
     public String toString() {
         return "Review{" +
                 "reviewID=" + reviewID +
-                ", customerID=" + (customer != null ? customer.getCustomerID() : null) +
+                ", customerID=" + (customer != null ? customer.getCustomerId() : null) +
                 ", carID=" + (car != null ? car.getCarID() : null) +
                 ", reviewStar=" + reviewStar +
                 ", comment='" + comment + '\'' +

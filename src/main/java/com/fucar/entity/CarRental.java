@@ -122,6 +122,8 @@ public class CarRental {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+    
+    
 
     // ============================
     // Safe toString (không đụng lazy)
@@ -131,7 +133,7 @@ public class CarRental {
     public String toString() {
         return "CarRental{" +
                 "rentalID=" + rentalID +
-                ", customerID=" + (customer != null ? customer.getCustomerID() : null) +
+                ", customerID=" + (customer != null ? customer.getCustomerId() : null) +
                 ", carID=" + (car != null ? car.getCarID() : null) +
                 ", pickupDate=" + pickupDate +
                 ", returnDate=" + returnDate +

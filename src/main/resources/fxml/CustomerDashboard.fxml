@@ -12,7 +12,7 @@
 
     <HBox spacing="15" alignment="CENTER">
         <Button fx:id="btnBrowseCars" text="Browse Cars" />
-        <Button fx:id="btnMyRentals" text="My Rentals" />
+        <Button fx:id="btnMyRentals" text="My Rentals"  onAction="#getMyRentals" />
         <Button fx:id="btnMyReviews" text="My Reviews" />
     </HBox>
 
