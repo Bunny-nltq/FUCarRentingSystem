@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/20"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fucar.browsecars.RentCarController"
+      spacing="20"
+      style="-fx-padding: 20;">
+
+    <!-- TITLE -->
+    <HBox spacing="10">
+        <Label text="Rent Car"
+               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <Button text="Cancel" onAction="#handleClose"
+                style="-fx-padding: 8 15; -fx-background-color: #95a5a6; -fx-text-fill: white;"/>
+    </HBox>
+
+    <!-- SEPARATOR -->
+    <Separator/>
+
+    <!-- CAR INFORMATION -->
+    <VBox spacing="10" style="-fx-padding: 10; -fx-background-color: #ecf0f1; -fx-border-radius: 5;">
+        <Label text="Selected Car" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+        <Label fx:id="lblCarName" text="Car Name" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+        <Label fx:id="lblPrice" text="Price" style="-fx-font-size: 14px; -fx-text-fill: #e74c3c;"/>
+    </VBox>
+
+    <!-- RENTAL DETAILS -->
+    <VBox spacing="12">
+        <Label text="Rental Details" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+
+        <GridPane hgap="15" vgap="12">
+            <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" minWidth="120" prefWidth="120"/>
+                <ColumnConstraints halignment="LEFT" minWidth="250" prefWidth="250"/>
+            </columnConstraints>
+
+            <!-- START DATE -->
+            <Label text="Start Date:" style="-fx-font-weight: bold;" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <DatePicker fx:id="dpStartDate"
+                        style="-fx-padding: 8; -fx-border-radius: 3;"
+                        GridPane.rowIndex="0"
+                        GridPane.columnIndex="1"/>
+
+            <!-- END DATE -->
+            <Label text="End Date:" style="-fx-font-weight: bold;" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <DatePicker fx:id="dpEndDate"
+                        style="-fx-padding: 8; -fx-border-radius: 3;"
+                        GridPane.rowIndex="1"
+                        GridPane.columnIndex="1"/>
+
+            <!-- RENTAL DAYS -->
+            <Label text="Rental Days:" style="-fx-font-weight: bold;" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <Spinner fx:id="spinnerDays"
+                     style="-fx-padding: 8; -fx-border-radius: 3;"
+                     prefWidth="250"
+                     GridPane.rowIndex="2"
+                     GridPane.columnIndex="1"/>
+
+        </GridPane>
+    </VBox>
+
+    <!-- PRICE SUMMARY -->
+    <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: #f0f8ff; -fx-border-radius: 5; -fx-border-color: #3498db; -fx-border-width: 1;">
+        <Label fx:id="lblTotalPrice"
+               text="Total: $0.00 for 0 day(s)"
+               style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;"/>
+        <Label text="Please note: This rental will be pending approval from the rental management system."
+               style="-fx-font-size: 11px; -fx-text-fill: #666; -fx-wrap-text: true;"/>
+    </VBox>
+
+    <!-- NOTES -->
+    <VBox spacing="8" style="-fx-padding: 10; -fx-background-color: #fffacd; -fx-border-radius: 5;">
+        <Label text="⚠ Important Notes:" style="-fx-font-weight: bold; -fx-font-size: 12px;"/>
+        <Label text="• Minimum rental period is 1 day" style="-fx-font-size: 11px; -fx-wrap-text: true;"/>
+        <Label text="• You cannot select dates in the past" style="-fx-font-size: 11px; -fx-wrap-text: true;"/>
+        <Label text="• Your rental request will need to be approved before confirmation" style="-fx-font-size: 11px; -fx-wrap-text: true;"/>
+    </VBox>
+
+    <!-- ACTION BUTTONS -->
+    <HBox spacing="10">
+        <Pane HBox.hgrow="ALWAYS"/>
+        <Button text="Cancel"
+                onAction="#handleClose"
+                style="-fx-padding: 10 25; -fx-background-color: #95a5a6; -fx-text-fill: white; -fx-font-size: 14px;"/>
+        <Button fx:id="btnRent"
+                text="Proceed to Rent"
+                onAction="#handleRent"
+                style="-fx-padding: 10 25; -fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 14px;"/>
+    </HBox>
+
+</VBox>

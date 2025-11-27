@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/20"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fucar.browsecars.BrowseCarsController"
+      spacing="15"
+      style="-fx-padding: 20;">
+
+    <!-- TITLE AND SEARCH SECTION -->
+    <VBox spacing="10">
+        <Label text="Browse Cars"
+               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+
+        <!-- SEARCH AND FILTER BAR -->
+        <HBox spacing="10" style="-fx-padding: 10; -fx-background-color: #ecf0f1; -fx-border-radius: 5;">
+            <Label text="Search:" style="-fx-text-fill: #333;"/>
+            <TextField fx:id="txtSearch"
+                       promptText="Search by car name or producer..."
+                       style="-fx-padding: 8; -fx-border-radius: 3;"
+                       HBox.hgrow="ALWAYS"/>
+
+            <Label text="Filter:" style="-fx-text-fill: #333;"/>
+            <ComboBox fx:id="cmbFilter"
+                      style="-fx-padding: 8; -fx-border-radius: 3;"
+                      prefWidth="120"
+                      onAction="#handleFilterChange"/>
+
+            <Button text="Search" fx:id="btnSearch"
+                    onAction="#handleSearch"
+                    style="-fx-padding: 8 20; -fx-background-color: #3498db; -fx-text-fill: white; -fx-border-radius: 3;"/>
+
+            <Button text="Refresh" 
+                    onAction="#handleRefresh"
+                    style="-fx-padding: 8 20; -fx-background-color: #95a5a6; -fx-text-fill: white; -fx-border-radius: 3;"/>
+        </HBox>
+    </VBox>
+
+    <!-- CARS DISPLAY AREA -->
+    <ScrollPane fx:id="scrollPane"
+                fitToWidth="true"
+                style="-fx-padding: 0;">
+        <VBox fx:id="carsContainer"
+              spacing="15"
+              style="-fx-padding: 10;">
+            <!-- Cars will be added here dynamically -->
+        </VBox>
+    </ScrollPane>
+
+</VBox>

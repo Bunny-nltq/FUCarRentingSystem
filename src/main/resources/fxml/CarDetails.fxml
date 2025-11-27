@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/20"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fucar.browsecars.CarDetailsController"
+      spacing="15"
+      style="-fx-padding: 20;">
+
+    <!-- TITLE -->
+    <HBox spacing="10">
+        <Label fx:id="lblCarName"
+               text="Car Details"
+               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <Button text="Close" onAction="#handleClose"
+                style="-fx-padding: 8 15; -fx-background-color: #95a5a6; -fx-text-fill: white;"/>
+    </HBox>
+
+    <!-- SEPARATOR -->
+    <Separator/>
+
+    <!-- DETAILS SECTION -->
+    <ScrollPane fitToWidth="true">
+        <VBox spacing="12" style="-fx-padding: 10;">
+
+            <!-- CAR INFO GRID -->
+            <GridPane hgap="15" vgap="12">
+                <columnConstraints>
+                    <ColumnConstraints halignment="RIGHT" minWidth="120" prefWidth="120"/>
+                    <ColumnConstraints halignment="LEFT" minWidth="250" prefWidth="250"/>
+                </columnConstraints>
+
+                <!-- Producer -->
+                <Label text="Producer:" style="-fx-font-weight: bold;" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <Label fx:id="lblProducer" text="N/A" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                <!-- Year -->
+                <Label text="Model Year:" style="-fx-font-weight: bold;" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <Label fx:id="lblYear" text="N/A" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                <!-- Color -->
+                <Label text="Color:" style="-fx-font-weight: bold;" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <Label fx:id="lblColor" text="N/A" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                <!-- Capacity -->
+                <Label text="Capacity:" style="-fx-font-weight: bold;" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <Label fx:id="lblCapacity" text="N/A" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                <!-- License Plate -->
+                <Label text="License Plate:" style="-fx-font-weight: bold;" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <Label fx:id="lblLicensePlate" text="N/A" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+                <!-- Import Date -->
+                <Label text="Import Date:" style="-fx-font-weight: bold;" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+                <Label fx:id="lblImportDate" text="N/A" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+                <!-- Status -->
+                <Label text="Status:" style="-fx-font-weight: bold;" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+                <Label fx:id="lblStatus" text="N/A" style="-fx-font-weight: bold;" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+                <!-- Price -->
+                <Label text="Rental Price:" style="-fx-font-weight: bold; -fx-text-fill: #e74c3c;" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+                <Label fx:id="lblPrice" text="$0.00 / day" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #e74c3c;" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+
+            </GridPane>
+
+            <!-- SEPARATOR -->
+            <Separator/>
+
+            <!-- DESCRIPTION -->
+            <Label text="Description:" style="-fx-font-weight: bold; -fx-font-size: 12px;"/>
+            <TextArea fx:id="txtDescription"
+                      wrapText="true"
+                      editable="false"
+                      prefRowCount="8"
+                      style="-fx-font-size: 11px; -fx-padding: 8; -fx-border-radius: 3;"/>
+
+        </VBox>
+    </ScrollPane>
+
+</VBox>
