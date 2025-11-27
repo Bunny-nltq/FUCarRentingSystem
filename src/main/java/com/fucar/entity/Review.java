@@ -98,9 +98,19 @@ public class Review {
     }
 
     // ============================
-    // Helper methods for controller/service
+    // Helper methods for TableView
     // ============================
 
+    // 🔥 JavaFX TableView sẽ dùng property "rating"
+    public Integer getRating() {
+        return reviewStar;
+    }
+
+    public void setRating(Integer rating) {
+        this.reviewStar = rating;
+    }
+
+    // Lấy ID an toàn tránh Lazy Loading
     public Integer getCustomerID() {
         return customer != null ? customer.getCustomerID() : null;
     }
@@ -110,7 +120,7 @@ public class Review {
     }
 
     // ============================
-    // Safe toString (tránh lỗi lazy)
+    // toString (safe)
     // ============================
 
     @Override

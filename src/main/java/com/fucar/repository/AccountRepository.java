@@ -23,15 +23,15 @@ public class AccountRepository {
     }
 
     // Lưu Account mới
-    public void save(Account acc) {
-        Transaction tx = null;
+    public void save(Account a) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            tx = session.beginTransaction();
-            session.persist(acc);
+            Transaction tx = session.beginTransaction();
+
+            session.persist(a);
+
             tx.commit();
         } catch (Exception e) {
-            if (tx != null) tx.rollback();
-            System.err.println("Error save Account: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

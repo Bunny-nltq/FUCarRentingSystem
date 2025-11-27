@@ -1,0 +1,44 @@
+/* ===== HEADER ===== */
+#header {
+    -fx-padding: 15;
+    -fx-background-color: #2c3e50;
+    -fx-alignment: center-left;
+}
+
+#header-title {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+/* ===== SIDEBAR ===== */
+#sidebar {
+    -fx-background-color: #34495e;
+    -fx-padding: 20;
+    -fx-spacing: 10;
+    -fx-pref-width: 200;
+}
+
+#menu-title {
+    -fx-text-fill: #ecf0f1;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 10 0;
+}
+
+.menu-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ecf0f1;
+    -fx-font-size: 15px;
+    -fx-alignment: center-left;
+}
+
+.menu-btn:hover {
+    -fx-background-color: #3b5770;
+}
+
+/* ===== CONTENT AREA ===== */
+#contentArea {
+    -fx-padding: 20;
+    -fx-background-color: #f4f6f7;
+}

@@ -19,42 +19,39 @@ public class RegisterController {
     @FXML private TextField txtEmail;
     @FXML private PasswordField txtPassword;
     @FXML private PasswordField txtConfirmPassword;
+
     @FXML private Button btnRegister;
     @FXML private Button btnGoLogin;
 
-    // =====================================================================
+    // =====================================================
     // MAINAPP SETTER
-    // =====================================================================
+    // =====================================================
     public void setMainApp(MainApp mainApp) {
-        System.out.println("setMainApp CALLED in RegisterController");
         this.mainApp = mainApp;
     }
 
     @FXML
     private void initialize() {
 
-        btnRegister.setOnAction(event -> handleRegister());
+        btnRegister.setOnAction(e -> handleRegister());
 
-        btnGoLogin.setOnAction(event -> {
-            if (mainApp != null)
-                mainApp.showLogin();
-            else
-                System.err.println("⚠ mainApp NULL khi bấm Go Login");
+        btnGoLogin.setOnAction(e -> {
+            if (mainApp != null) mainApp.showLogin();
         });
     }
 
-    // =====================================================================
+    // =====================================================
     // HANDLE REGISTER
-    // =====================================================================
+    // =====================================================
     @FXML
-    public void handleRegister() {
+    private void handleRegister() {
 
         String accountName = txtAccountName.getText().trim();
         String email = txtEmail.getText().trim();
         String password = txtPassword.getText().trim();
         String confirm = txtConfirmPassword.getText().trim();
 
-        // ---------- VALIDATION ----------
+        // ---------------- VALIDATION ----------------
         if (accountName.isEmpty() || email.isEmpty() || password.isEmpty()) {
             System.out.println("❌ Name, Email and Password cannot be empty!");
             return;
@@ -75,50 +72,54 @@ public class RegisterController {
             return;
         }
 
-        // ---------- CREATE ACCOUNT ----------
+        // =====================================================
+        // 1️⃣ TẠO ACCOUNT bằng AuthService
+        // =====================================================
         AuthService authService = new AuthService();
-        Account newAccount = authService.registerAndReturn(email, password, "CUSTOMER", accountName);
+
+        Account newAccount = authService.registerAndReturn(
+                email, password, "CUSTOMER", accountName
+        );
 
         if (newAccount == null) {
-            System.out.println("❌ Email already exists. Try another one.");
+            System.out.println("❌ Email already exists!");
             return;
         }
 
-        System.out.println("✅ Account created! ID = " + newAccount.getAccountId());
+        System.out.println("✅ Created Account ID = " + newAccount.getAccountId());
 
 
-        // =====================================================================
-        // AUTO CREATE CUSTOMER (VÌ ĐỀ YÊU CẦU TẤT CẢ FIELD NOT NULL)
-        // =====================================================================
+        // =====================================================
+        // 2️⃣ TẠO CUSTOMER TƯƠNG ỨNG
+        // =====================================================
         CustomerService customerService = new CustomerService();
+        Customer c = new Customer();
 
-        Customer customer = new Customer();
-        customer.setCustomerName(accountName);
-        customer.setEmail(email);
+        c.setCustomerName(accountName);
+        c.setEmail(email);
 
-        // Vì đề yêu cầu tất cả field NOT NULL → phải cấp giá trị mặc định
-        customer.setMobile("N/A");
-        customer.setBirthday(null);
-        customer.setIdentityCard("N/A");
-        customer.setLicenceNumber("N/A");
-        customer.setLicenceDate(null);
+        // Các field NOT NULL phải gán mặc định
+        c.setMobile("N/A");
+        c.setIdentityCard("N/A");
+        c.setLicenceNumber("N/A");
 
-        // Nếu không dùng password trong Customer → nhưng cột NOT NULL → gán mặc định
-        customer.setPassword("default");
+        c.setBirthday(null);
+        c.setLicenceDate(null);
 
-        customer.setAccount(newAccount);  // FK
+        c.setAccount(newAccount); // 🔥 BẮT BUỘC – FK
 
-        customerService.addCustomer(customer);
+        customerService.addCustomer(c);
 
-        System.out.println("✅ Customer created for AccountID = " + newAccount.getAccountId());
+        System.out.println("✅ Customer created and linked to AccountID " + newAccount.getAccountId());
 
 
-        // ---------- REDIRECT ----------
-        if (mainApp == null) {
-            System.err.println("⚠ ERROR: mainApp is NULL! Bạn quên gọi setMainApp() trong MainApp.");
-            return;
+        // =====================================================
+        // REDIRECT → LOGIN
+        // =====================================================
+        if (mainApp != null) {
+            mainApp.showLogin();
+        } else {
+            System.err.println("⚠ mainApp NULL — bạn chưa gọi setMainApp()");
         }
-
-        mainApp.showLogin();
     }
 }

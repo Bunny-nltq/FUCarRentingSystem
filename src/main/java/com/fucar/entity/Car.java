@@ -71,13 +71,6 @@ public class Car {
     public String getStatus() { return status; }
     public String getLicensePlate() { return licensePlate; }
 
-    /**
-     * Alias method để code cũ vẫn chạy
-     */
-    public Double getPricePerDay() {
-        return rentPrice;
-    }
-
     // ===========================
     // Setters
     // ===========================
@@ -94,22 +87,24 @@ public class Car {
     public void setLicensePlate(String licensePlate) { this.licensePlate = licensePlate; }
 
     // ===========================
-    // Safe toString
+    // Convenience Helpers
+    // ===========================
+
+    /** Hiển thị tên xe + biển số — RẤT hữu ích cho UI (ComboBox) */
+    public String getDisplayName() {
+        return carName + " - " + licensePlate;
+    }
+
+    /** Alias để tương thích legacy code */
+    public Double getPricePerDay() {
+        return rentPrice;
+    }
+
+    // ===========================
+    // Safe toString (dùng nội bộ)
     // ===========================
     @Override
     public String toString() {
-        return "Car{" +
-                "carID=" + carID +
-                ", carName='" + carName + '\'' +
-                ", carModelYear=" + carModelYear +
-                ", color='" + color + '\'' +
-                ", capacity=" + capacity +
-                ", description='" + description + '\'' +
-                ", importDate=" + importDate +
-                ", producerID=" + (producer != null ? producer.getProducerID() : null) +
-                ", rentPrice=" + rentPrice +
-                ", status='" + status + '\'' +
-                ", licensePlate='" + licensePlate + '\'' +
-                '}';
+        return getDisplayName();
     }
 }

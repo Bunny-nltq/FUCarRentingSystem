@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/20"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fucar.gui.controller.ReviewManagementController"
+      spacing="20" alignment="CENTER">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Review Management"
+           style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+
+    <TableView fx:id="tableReviews" prefWidth="800">
+
+        <columns>
+            <TableColumn fx:id="colID" text="ID" prefWidth="60" />
+            <TableColumn fx:id="colCustomer" text="Customer ID" prefWidth="120" />
+            <TableColumn fx:id="colCar" text="Car ID" prefWidth="120" />
+            <TableColumn fx:id="colRating" text="Rating" prefWidth="100" />
+            <TableColumn fx:id="colComment" text="Comment" prefWidth="300" />
+            <TableColumn fx:id="colDate" text="Created At" prefWidth="150" />
+        </columns>
+    </TableView>
+
+</VBox>

@@ -17,40 +17,51 @@ public class MainApp extends Application {
         showLogin();
     }
 
-    // =================================================================
+    // ===============================
     // LOGIN
-    // =================================================================
+    // ===============================
     public void showLogin() {
-        loadScreen("/fxml/Login.fxml", "Login", LoginController.class);
+        loadScreen("/fxml/Login.fxml", "Login",
+                LoginController.class, "/css/style.css");
     }
 
-    // =================================================================
+    // ===============================
     // REGISTER
-    // =================================================================
+    // ===============================
     public void showRegister() {
-        loadScreen("/fxml/Register.fxml", "Register", RegisterController.class);
+        loadScreen("/fxml/Register.fxml", "Register",
+                RegisterController.class, "/css/style.css");
     }
 
-    // =================================================================
+    // ===============================
     // ADMIN DASHBOARD
-    // =================================================================
+    // ===============================
     public void showAdminDashboard() {
-        loadScreen("/fxml/AdminDashboard.fxml",
-                "Admin Dashboard", AdminDashboardController.class);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AdminDashboard.fxml"));
+            Parent root = loader.load();
+
+            AdminDashboardController controller = loader.getController();
+            controller.setMainApp(this);
+
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/web.css").toExternalForm());
+
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("Admin Dashboard");
+            primaryStage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    // =================================================================
+    // ===============================
     // CUSTOMER DASHBOARD
-    // =================================================================
+    // ===============================
     public void showCustomerDashboard(int customerId) {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/fxml/CustomerDashboard.fxml")
-            );
-
-            if (loader.getLocation() == null)
-                throw new RuntimeException("Không tìm thấy CustomerDashboard.fxml");
-
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CustomerDashboard.fxml"));
             Parent root = loader.load();
 
             CustomerDashboardController controller = loader.getController();
@@ -58,171 +69,103 @@ public class MainApp extends Application {
             controller.setLoggedCustomerId(customerId);
 
             Scene scene = new Scene(root);
-            addCss(scene, "/css/style.css");
+            scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
 
-            primaryStage.setTitle("Customer Dashboard");
             primaryStage.setScene(scene);
+            primaryStage.setTitle("Customer Dashboard");
             primaryStage.show();
 
         } catch (Exception e) {
-            System.err.println("❌ Lỗi load CustomerDashboard.fxml");
             e.printStackTrace();
         }
     }
 
-    // =================================================================
-    // PROFILE
-    // =================================================================
+
+
+    // ===============================
+    // PROFILE (customer)
+    // ===============================
     public void showProfileManagement(int customerId) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Profile.fxml"));
-
-            if (loader.getLocation() == null)
-                throw new RuntimeException("Không tìm thấy Profile.fxml");
-
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainLayout.fxml"));
             Parent root = loader.load();
 
-            ProfileController controller = loader.getController();
+            MainLayoutController controller = loader.getController();
             controller.setMainApp(this);
             controller.setCustomerId(customerId);
+            controller.loadProfileContent();
 
             Scene scene = new Scene(root);
-            addCss(scene, "/css/style.css");
+            scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
 
-            primaryStage.setTitle("My Profile");
             primaryStage.setScene(scene);
+            primaryStage.setTitle("My Profile");
             primaryStage.show();
 
         } catch (Exception e) {
-            System.err.println("❌ Lỗi load Profile.fxml");
             e.printStackTrace();
         }
     }
 
-    // =================================================================
-    // MANAGEMENT SCREENS
-    // =================================================================
-    public void showCarManagement() {
-        loadScreen("/fxml/CarManagement.fxml",
-                "Car Management", CarManagementController.class);
+    // ===============================
+    // MANAGEMENT (Admin)
+    // ===============================
+    public void showCustomerManagement() {
+        loadScreen("/fxml/CustomerManagement.fxml", "Customer Management",
+                CustomerManagementController.class, "/css/style.css");
     }
 
-    public void showCustomerManagement() {
-        loadScreen("/fxml/CustomerManagement.fxml",
-                "Customer Management", CustomerManagementController.class);
+    public void showCarManagement() {
+        loadScreen("/fxml/CarManagement.fxml", "Car Management",
+                CarManagementController.class, "/css/style.css");
     }
 
     public void showCarRentalManagement() {
-        loadScreen("/fxml/CarRentalManagement.fxml",
-                "Car Rental Management", CarRentalManagementController.class);
+        loadScreen("/fxml/CarRentalManagement.fxml", "Car Rental Management",
+                CarRentalManagementController.class, "/css/style.css");
     }
 
     public void showReviewManagement() {
-        loadScreen("/fxml/Review.fxml",
-                "Review Management", ReviewController.class);
+        loadScreen("/fxml/Review.fxml", "Review Management",
+                ReviewController.class, "/css/style.css");
     }
 
     public void showReportDashboard() {
-        loadScreen("/fxml/ReportDashboard.fxml",
-                "Rental Report Dashboard", ReportDashboardController.class);
+        loadScreen("/fxml/ReportDashboard.fxml", "Rental Report Dashboard",
+                ReportDashboardController.class, "/css/style.css");
     }
 
-    // =================================================================
-    // GENERIC SCREEN LOADER (CHUẨN NHẤT)
-    // =================================================================
-    private <T> void loadScreen(String fxmlPath, String title, Class<T> controllerClass) {
+    // ==========================================================
+    // GENERIC SCREEN LOADER
+    // ==========================================================
+    private <T> void loadScreen(String fxml, String title, Class<T> type, String css) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-
-            if (loader.getLocation() == null)
-                throw new RuntimeException("Không tìm thấy file FXML: " + fxmlPath);
-
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
             Parent root = loader.load();
 
             T controller = loader.getController();
-
-            // Gọi setMainApp nếu có
             try {
-                controllerClass.getMethod("setMainApp", MainApp.class)
-                        .invoke(controller, this);
+                type.getMethod("setMainApp", MainApp.class).invoke(controller, this);
             } catch (NoSuchMethodException ignored) {}
 
             Scene scene = new Scene(root);
-            addCss(scene, "/css/style.css");
+            scene.getStylesheets().add(getClass().getResource(css).toExternalForm());
 
-            primaryStage.setTitle(title);
             primaryStage.setScene(scene);
+            primaryStage.setTitle(title);
             primaryStage.show();
 
         } catch (Exception e) {
-            System.err.println("❌ Lỗi khi load FXML: " + fxmlPath);
             e.printStackTrace();
         }
     }
 
-    // =================================================================
-    // POPUP WINDOWS
-    // =================================================================
-    public void showAddCustomerForm(CustomerManagementController parentController) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AddCustomer.fxml"));
-            Parent view = loader.load();
-
-            Stage stage = new Stage();
-            stage.setTitle("Add Customer");
-            stage.setScene(new Scene(view));
-
-            // GỌI REFRESH khi popup đóng
-            stage.setOnHiding(event -> {
-                parentController.reloadAfterPopup();
-            });
-
-            stage.show();
-
-        } catch (Exception e) {
-            System.err.println("❌ Lỗi load AddCustomer.fxml");
-            e.printStackTrace();
-        }
-    }
-
-
-
-    public void showEditCustomerForm(Integer customerId) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/EditCustomer.fxml"));
-
-            if (loader.getLocation() == null)
-                throw new RuntimeException("Không tìm thấy EditCustomer.fxml");
-
-            Parent view = loader.load();
-
-            EditCustomerController controller = loader.getController();
-            controller.setCustomerId(customerId);
-
-            Stage stage = new Stage();
-            stage.setTitle("Edit Customer");
-            stage.setScene(new Scene(view));
-            stage.show();
-
-        } catch (Exception e) {
-            System.err.println("❌ Lỗi load EditCustomer.fxml");
-            e.printStackTrace();
-        }
-    }
-
-    // =================================================================
-    // CSS
-    // =================================================================
-    private void addCss(Scene scene, String cssPath) {
-        try {
-            scene.getStylesheets().add(
-                    getClass().getResource(cssPath).toExternalForm()
-            );
-        } catch (Exception e) {
-            System.err.println("⚠ Không tìm thấy CSS: " + cssPath);
-        }
-    }
-    
+    // ===============================
+    // (IMPORTANT) — Removed popup handlers
+    // ===============================
+    // ❌ NO showAddCustomerForm()
+    // ❌ NO showEditCustomerForm()
+    // Vì Add/Edit được xử lý trực tiếp trong CustomerManagementController
 
     public static void main(String[] args) {
         launch(args);

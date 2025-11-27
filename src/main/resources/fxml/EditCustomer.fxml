@@ -6,7 +6,11 @@
 <VBox xmlns="http://javafx.com/javafx/20"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.fucar.gui.controller.EditCustomerController"
-      spacing="12" padding="20">
+      spacing="12">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
 
     <Label text="Edit Customer" style="-fx-font-size: 20px; -fx-font-weight: bold"/>
 
@@ -25,12 +29,24 @@
         <Label text="Email:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
         <TextField fx:id="txtEmail" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-        <Label text="Address:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-        <TextField fx:id="txtAddress" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+        <Label text="Identity Card:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtIdentityCard" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+        
+        <Label text="Birthday:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+<DatePicker fx:id="dpBirthday" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+<Label text="Licence Number:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+<TextField fx:id="txtLicenceNumber" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+<Label text="Licence Date:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+<DatePicker fx:id="dpLicenceDate" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+        
+    
     </GridPane>
 
     <HBox spacing="15">
-        <Button fx:id="btnSave" text="Save" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+        <Button fx:id="btnSave" text="Save"
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
         <Button fx:id="btnCancel" text="Cancel"/>
     </HBox>
 

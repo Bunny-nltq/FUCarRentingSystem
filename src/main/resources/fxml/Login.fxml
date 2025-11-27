@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -8,13 +9,37 @@
       fx:controller="com.fucar.gui.controller.LoginController"
       stylesheets="@../css/style.css">
 
-    <Label text="Login" />
+    <!-- PADDING -->
+    <padding>
+        <Insets top="40" right="40" bottom="40" left="40"/>
+    </padding>
 
-    <TextField fx:id="txtEmail" promptText="Email" />
-    <PasswordField fx:id="txtPassword" promptText="Password" />
+    <!-- TITLE -->
+    <Label text="🚗 FUCAR LOGIN"
+           style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
 
-    <Button fx:id="btnLogin" text="Login" onAction="#handleLogin" />
-    <Button fx:id="btnGoRegister" text="Go to Register" onAction="#goRegister" />
+    <!-- EMAIL -->
+    <TextField fx:id="txtEmail"
+               promptText="Email"
+               style="-fx-font-size: 16px; -fx-pref-width: 280;" />
+
+    <!-- PASSWORD -->
+    <PasswordField fx:id="txtPassword"
+                   promptText="Password"
+                   style="-fx-font-size: 16px; -fx-pref-width: 280;" />
+
+    <!-- LOGIN BUTTON -->
+    <Button fx:id="btnLogin"
+            text="Login"
+            onAction="#handleLogin"
+            style="-fx-background-color: #3498db; -fx-text-fill: white;
+                   -fx-font-size: 16px; -fx-padding: 8 30; -fx-background-radius: 5;" />
+
+    <!-- REGISTER LINK -->
+    <Button fx:id="btnGoRegister"
+            text="Create a new account"
+            onAction="#goRegister"
+            style="-fx-background-color: transparent; -fx-text-fill: #2980b9;
+                   -fx-font-size: 14px;" />
 
 </VBox>
-

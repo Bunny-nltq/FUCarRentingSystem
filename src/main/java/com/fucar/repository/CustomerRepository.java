@@ -71,8 +71,17 @@ public class CustomerRepository {
     // SAVE
     // ================================
     public void save(Customer c) {
-        executeTransaction(session -> session.persist(c));
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+
+            session.persist(c);
+
+            tx.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
 
     // ================================
     // UPDATE

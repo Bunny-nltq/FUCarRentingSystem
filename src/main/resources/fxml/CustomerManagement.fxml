@@ -1,31 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
 
-<VBox alignment="TOP_CENTER" spacing="10"
-      xmlns="http://javafx.com/javafx/20"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.fucar.gui.controller.CustomerManagementController"
-      stylesheets="@../css/style.css">
+<BorderPane xmlns="http://javafx.com/javafx/20"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.fucar.gui.controller.CustomerManagementController"
+            stylesheets="@/css/web.css">
 
-    <Label text="Customer Management"
-           style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+    <top>
+        <Label text="Customer Management"
+               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-padding: 10 0 10 20;"/>
+    </top>
 
-    <TableView fx:id="customerTable" prefWidth="600" prefHeight="300">
+    <center>
+        <VBox spacing="10" style="-fx-padding: 20;">
+            <TableView fx:id="customerTable" prefWidth="700" prefHeight="450" styleClass="web-table">
+                <columns>
+                    <TableColumn fx:id="colID" text="ID" prefWidth="60"/>
+                    <TableColumn fx:id="colName" text="Name" prefWidth="180"/>
+                    <TableColumn fx:id="colEmail" text="Email" prefWidth="220"/>
+                    <TableColumn fx:id="colPhone" text="Phone" prefWidth="120"/>
+                    <TableColumn fx:id="colBirthday" text="Birthday" prefWidth="120"/>
+                    <TableColumn fx:id="colIdentityCard" text="Identity Card" prefWidth="140"/>
+                    <TableColumn fx:id="colLicenceNumber" text="Licence Number" prefWidth="140"/>
+                    <TableColumn fx:id="colLicenceDate" text="Licence Date" prefWidth="140"/>
+                </columns>
+            </TableView>
 
-        <columns>
-            <TableColumn fx:id="colID" text="ID" prefWidth="50"/>
-            <TableColumn fx:id="colName" text="Name" prefWidth="150"/>
-            <TableColumn fx:id="colEmail" text="Email" prefWidth="200"/>
-            <TableColumn fx:id="colPhone" text="Phone" prefWidth="150"/>
-        </columns>
+            <HBox spacing="10" alignment="CENTER">
+                <Button fx:id="btnAddCustomer" text="Add Customer" onAction="#handleAddCustomer" />
+                <Button fx:id="btnEditCustomer" text="Edit Customer" onAction="#handleEditCustomer" />
+                <Button fx:id="btnDeleteCustomer" text="Delete Customer" onAction="#handleDeleteCustomer" />
+            </HBox>
+        </VBox>
+    </center>
 
-    </TableView>
+    <right>
+        <StackPane fx:id="rightPane" style="-fx-padding: 20; -fx-pref-width: 400;">
+            <VBox alignment="CENTER" spacing="8">
+                <Label text="Actions" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <Label text="Click Add/Edit Customer to load form here." wrapText="true"/>
+            </VBox>
+        </StackPane>
+    </right>
 
-    <HBox spacing="10" alignment="CENTER">
-        <Button fx:id="btnAddCustomer" text="Add Customer"/>
-        <Button fx:id="btnEditCustomer" text="Edit Customer"/>
-        <Button fx:id="btnDeleteCustomer" text="Delete Customer"/>
-    </HBox>
-
-</VBox>
+</BorderPane>

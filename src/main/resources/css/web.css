@@ -1,0 +1,53 @@
+* {
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* HEADER */
+#header {
+    -fx-padding: 15;
+    -fx-background-color: #2a81e7;
+    -fx-alignment: center-left;
+}
+
+#header-title {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+#logoutBtn {
+    -fx-background-color: white;
+    -fx-text-fill: #2a81e7;
+    -fx-background-radius: 20;
+}
+
+/* SIDEBAR */
+#sidebar {
+    -fx-padding: 20;
+    -fx-background-color: #f2f4f7;
+}
+
+.menu-btn {
+    -fx-background-radius: 5;
+    -fx-background-color: transparent;
+    -fx-text-fill: #333;
+    -fx-font-size: 14px;
+}
+
+.menu-btn:hover {
+    -fx-background-color: #e0e7ff;
+}
+
+/* CONTENT AREA */
+#contentArea {
+    -fx-padding: 20;
+}
+
+/* WEB-STYLE TABLE */
+.table-view {
+    -fx-background-color: white;
+    -fx-padding: 10;
+    -fx-background-radius: 10;
+    -fx-border-color: #dcdcdc;
+    -fx-border-radius: 10;
+}

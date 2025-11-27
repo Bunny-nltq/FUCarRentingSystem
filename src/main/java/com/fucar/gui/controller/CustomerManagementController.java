@@ -7,7 +7,13 @@ import com.fucar.service.CarRentalService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
+
+import java.io.IOException;
+import java.util.Optional;
 
 public class CustomerManagementController {
 
@@ -21,8 +27,13 @@ public class CustomerManagementController {
     @FXML private TableColumn<Customer, String> colName;
     @FXML private TableColumn<Customer, String> colEmail;
     @FXML private TableColumn<Customer, String> colPhone;
+    @FXML private TableColumn<Customer, String> colBirthday;
+    @FXML private TableColumn<Customer, String> colIdentityCard;
+    @FXML private TableColumn<Customer, String> colLicenceNumber;
+    @FXML private TableColumn<Customer, String> colLicenceDate;
 
-    @FXML private Button btnAddCustomer, btnEditCustomer, btnDeleteCustomer;
+
+    @FXML private StackPane rightPane;
 
     private final ObservableList<Customer> customerList = FXCollections.observableArrayList();
 
@@ -34,69 +45,81 @@ public class CustomerManagementController {
     private void initialize() {
         setupTableColumns();
         loadCustomerData();
-
-        btnAddCustomer.setOnAction(e -> openAddCustomerForm());
-        btnEditCustomer.setOnAction(e -> openEditCustomerForm());
-        btnDeleteCustomer.setOnAction(e -> deleteCustomer());
     }
 
-    // ================================
-    // SETUP TABLE COLUMNS
-    // ================================
     private void setupTableColumns() {
-        colID.setCellValueFactory(data ->
-                new javafx.beans.property.SimpleIntegerProperty(
-                        data.getValue().getCustomerID()
-                ).asObject()
+        colID.setCellValueFactory(c ->
+            new javafx.beans.property.SimpleIntegerProperty(c.getValue().getCustomerID()).asObject()
         );
 
-        colName.setCellValueFactory(data ->
-                new javafx.beans.property.SimpleStringProperty(
-                        data.getValue().getCustomerName()
-                )
+        colName.setCellValueFactory(c ->
+            new javafx.beans.property.SimpleStringProperty(c.getValue().getCustomerName())
         );
 
-        colEmail.setCellValueFactory(data ->
-                new javafx.beans.property.SimpleStringProperty(
-                        data.getValue().getEmail()
-                )
+        colEmail.setCellValueFactory(c ->
+            new javafx.beans.property.SimpleStringProperty(c.getValue().getEmail())
         );
 
-        colPhone.setCellValueFactory(data ->
-                new javafx.beans.property.SimpleStringProperty(
-                        data.getValue().getMobile()
-                )
+        colPhone.setCellValueFactory(c ->
+            new javafx.beans.property.SimpleStringProperty(c.getValue().getMobile())
+        );
+
+        colBirthday.setCellValueFactory(c ->
+            new javafx.beans.property.SimpleStringProperty(
+                c.getValue().getBirthday() == null ? "" : c.getValue().getBirthday().toString()
+            )
+        );
+
+        colIdentityCard.setCellValueFactory(c ->
+            new javafx.beans.property.SimpleStringProperty(c.getValue().getIdentityCard())
+        );
+
+        colLicenceNumber.setCellValueFactory(c ->
+            new javafx.beans.property.SimpleStringProperty(c.getValue().getLicenceNumber())
+        );
+
+        colLicenceDate.setCellValueFactory(c ->
+            new javafx.beans.property.SimpleStringProperty(
+                c.getValue().getLicenceDate() == null ? "" : c.getValue().getLicenceDate().toString()
+            )
         );
     }
 
-    // ================================
-    // LOAD DATA
-    // ================================
+
     public void loadCustomerData() {
         customerList.setAll(customerService.getAllCustomers());
         customerTable.setItems(customerList);
     }
 
-    // ================================
-    // REFRESH SAU POPUP
-    // ================================
-    public void reloadAfterPopup() {
+    public void reloadAfterForm() {
         loadCustomerData();
         customerTable.refresh();
+        clearRightPane();                             // ⭐ Form tự đóng sau khi lưu
     }
 
-    // ================================
-    // ADD CUSTOMER
-    // ================================
-    private void openAddCustomerForm() {
-        if (mainApp != null)
-            mainApp.showAddCustomerForm(this);  // ⭐ Gửi controller lên MainApp
+    public void clearRightPane() {
+        rightPane.getChildren().clear();
     }
 
-    // ================================
-    // EDIT CUSTOMER
-    // ================================
-    private void openEditCustomerForm() {
+    @FXML
+    private void handleAddCustomer() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AddCustomer.fxml"));
+            Parent form = loader.load();
+
+            AddCustomerController controller = loader.getController();
+            controller.setParentController(this);
+
+            rightPane.getChildren().setAll(form);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", e.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleEditCustomer() {
         Customer selected = customerTable.getSelectionModel().getSelectedItem();
 
         if (selected == null) {
@@ -104,40 +127,51 @@ public class CustomerManagementController {
             return;
         }
 
-        mainApp.showEditCustomerForm(selected.getCustomerID());
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/EditCustomer.fxml"));
+            Parent form = loader.load();
+
+            EditCustomerController controller = loader.getController();
+            controller.setParentController(this);
+            controller.setCustomerId(selected.getCustomerID());
+
+            rightPane.getChildren().setAll(form);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error", e.getMessage());
+        }
     }
 
-    // ================================
-    // DELETE CUSTOMER
-    // ================================
-    private void deleteCustomer() {
-        Customer selected = customerTable.getSelectionModel().getSelectedItem();
+    @FXML
+    private void handleDeleteCustomer() {
+        Customer c = customerTable.getSelectionModel().getSelectedItem();
 
-        if (selected == null) {
+        if (c == null) {
             showAlert("Warning", "Please select a customer to delete.");
             return;
         }
 
-        boolean hasRental = rentalService.existsByCustomerId(selected.getCustomerID());
-
-        if (hasRental) {
-            showAlert("Error", "This customer has rental transactions and cannot be deleted.");
+        if (rentalService.existsByCustomerId(c.getCustomerID())) {
+            showAlert("Error", "Customer has rental history. Cannot delete.");
             return;
         }
 
-        customerService.deleteCustomer(selected.getCustomerID());
-        loadCustomerData();
-        showAlert("Success", "Customer deleted successfully!");
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
+                "Delete customer: " + c.getCustomerName() + " ?", ButtonType.OK, ButtonType.CANCEL);
+
+        Optional<ButtonType> res = confirm.showAndWait();
+        if (res.isPresent() && res.get() == ButtonType.OK) {
+            customerService.deleteCustomer(c.getCustomerID());
+            reloadAfterForm();
+        }
     }
 
-    // ================================
-    // ALERT
-    // ================================
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+    private void showAlert(String title, String msg) {
+        Alert a = new Alert(Alert.AlertType.INFORMATION);
+        a.setTitle(title);
+        a.setHeaderText(null);
+        a.setContentText(msg);
+        a.showAndWait();
     }
 }

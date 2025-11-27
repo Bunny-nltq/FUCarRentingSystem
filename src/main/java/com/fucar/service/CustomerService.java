@@ -43,22 +43,21 @@ public class CustomerService {
     }
 
     // =====================================================
-    // TẠO CUSTOMER MẶC ĐỊNH (nếu dùng register)
+    // Create Customer when Register
     // =====================================================
 
     public Customer createDefaultCustomer(Account account) {
 
         Customer c = new Customer();
 
-        c.setAccount(account);
-        c.setEmail(account.getEmail());
+        c.setAccount(account);             // gắn account
+        c.setEmail(account.getEmail());    // email lấy từ account
         c.setCustomerName(account.getAccountName());
 
         // Các trường NOT NULL
         c.setMobile("N/A");
-        c.setPassword("123456");
 
-        // Optional
+        // Các trường Optional
         c.setIdentityCard("N/A");
         c.setLicenceNumber("N/A");
         c.setBirthday(null);

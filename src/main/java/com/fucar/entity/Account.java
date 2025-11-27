@@ -17,20 +17,23 @@ public class Account {
     @Column(nullable = false, unique = true)
     private String email;
 
-    // ĐÚNG 100%: Khớp với table Account.PasswordHash
+    // Cột trong DB là PasswordHash
     @Column(name = "PasswordHash", nullable = false)
     private String passwordHash;
 
     @Column(nullable = false)
     private String role; // ADMIN / CUSTOMER
 
-    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    /**
+     * Không cascade từ Account → Customer
+     * Tránh lỗi "deleted object would be re-saved by cascade"
+     */
+    @OneToOne(mappedBy = "account", fetch = FetchType.LAZY)
     private Customer customer;
 
     // =========================
     // Constructors
     // =========================
-
     public Account() {}
 
     public Account(String email, String passwordHash, String role, String accountName) {
@@ -43,7 +46,6 @@ public class Account {
     // =========================
     // Getters
     // =========================
-
     public Integer getAccountId() {
         return accountId;
     }
@@ -71,13 +73,19 @@ public class Account {
     // =========================
     // Setters
     // =========================
-
     public void setAccountId(Integer accountId) {
         this.accountId = accountId;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    /** 
+     * Setter chuẩn để AddCustomerController và RegisterController dùng
+     */
+    public void setPassword(String password) {
+        this.passwordHash = password;
     }
 
     public void setPasswordHash(String passwordHash) {

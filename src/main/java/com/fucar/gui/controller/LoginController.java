@@ -34,12 +34,17 @@ public class LoginController {
         String email = txtEmail.getText().trim();
         String pass = txtPassword.getText().trim();
 
+        // ========================
+        // CHECK EMPTY INPUT
+        // ========================
         if (email.isEmpty() || pass.isEmpty()) {
             showError("Please enter email & password.");
             return;
         }
 
-        // Kiểm tra account
+        // ========================
+        // LOGIN
+        // ========================
         Account acc = accountService.login(email, pass);
 
         if (acc == null) {
@@ -50,16 +55,16 @@ public class LoginController {
         System.out.println("Đăng nhập thành công!");
 
         // ========================
-        // PHÂN QUYỀN
+        // ROLE = ADMIN
         // ========================
-        if (acc.getRole() != null && acc.getRole().equalsIgnoreCase("ADMIN")) {
+        if ("ADMIN".equalsIgnoreCase(acc.getRole())) {
             System.out.println("→ Admin login detected. Redirecting to Admin Dashboard...");
-            mainApp.showAdminDashboard();   // ⭐⭐ ĐIỀU HƯỚNG ADMIN Ở ĐÂY
+            mainApp.showAdminDashboard();
             return;
         }
 
         // ========================
-        // CUSTOMER LOGIN
+        // ROLE = CUSTOMER
         // ========================
         Customer customer = customerService.findByAccountId(acc.getAccountId());
 
@@ -71,8 +76,11 @@ public class LoginController {
         int customerId = customer.getCustomerID();
 
         System.out.println("→ Customer login. Redirecting to Customer Dashboard...");
+
+        // ⭐ Load dashboard mới (MainLayout)
         mainApp.showCustomerDashboard(customerId);
     }
+
 
     @FXML
     public void goRegister() {

@@ -15,7 +15,7 @@ public class Customer {
     @Column(name = "CustomerName", nullable = false)
     private String customerName;
 
-    @Column(name = "Mobile", nullable = false)
+    @Column(name = "Mobile")
     private String mobile;
 
     @Column(name = "Birthday")
@@ -33,6 +33,7 @@ public class Customer {
     @Column(name = "Email", nullable = false)
     private String email;
 
+    // ⭐ BẮT BUỘC: vì database có cột Password NOT NULL
     @Column(name = "Password", nullable = false)
     private String password;
 
@@ -42,35 +43,88 @@ public class Customer {
 
     public Customer() {}
 
-    // Getters & Setters
+    // =======================
+    // GETTERS & SETTERS
+    // =======================
 
-    public Integer getCustomerID() { return customerID; }
-    public void setCustomerID(Integer customerID) { this.customerID = customerID; }
+    public Integer getCustomerID() {
+        return customerID;
+    }
 
-    public String getCustomerName() { return customerName; }
-    public void setCustomerName(String customerName) { this.customerName = customerName; }
+    public void setCustomerID(Integer customerID) {
+        this.customerID = customerID;
+    }
 
-    public String getMobile() { return mobile; }
-    public void setMobile(String mobile) { this.mobile = mobile; }
+    public String getCustomerName() {
+        return customerName;
+    }
 
-    public LocalDate getBirthday() { return birthday; }
-    public void setBirthday(LocalDate birthday) { this.birthday = birthday; }
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
 
-    public String getIdentityCard() { return identityCard; }
-    public void setIdentityCard(String identityCard) { this.identityCard = identityCard; }
+    public String getMobile() {
+        return mobile;
+    }
 
-    public String getLicenceNumber() { return licenceNumber; }
-    public void setLicenceNumber(String licenceNumber) { this.licenceNumber = licenceNumber; }
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
-    public LocalDate getLicenceDate() { return licenceDate; }
-    public void setLicenceDate(LocalDate licenceDate) { this.licenceDate = licenceDate; }
+    public LocalDate getBirthday() {
+        return birthday;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public String getIdentityCard() {
+        return identityCard;
+    }
 
-    public Account getAccount() { return account; }
-    public void setAccount(Account account) { this.account = account; }
+    public void setIdentityCard(String identityCard) {
+        this.identityCard = identityCard;
+    }
+
+    public String getLicenceNumber() {
+        return licenceNumber;
+    }
+
+    public void setLicenceNumber(String licenceNumber) {
+        this.licenceNumber = licenceNumber;
+    }
+
+    public LocalDate getLicenceDate() {
+        return licenceDate;
+    }
+
+    public void setLicenceDate(LocalDate licenceDate) {
+        this.licenceDate = licenceDate;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    // ⭐⭐⭐ Thêm password getter/setter
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 }

@@ -2,53 +2,71 @@ package com.fucar.gui.controller;
 
 import com.fucar.MainApp;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.layout.StackPane;
 
 public class AdminDashboardController {
 
+    @FXML
+    private StackPane contentArea;
+
     private MainApp mainApp;
 
-    @FXML
-    private Button btnCarManagement;
+    public void setMainApp(MainApp app) {
+        this.mainApp = app;
+    }
+
+    /**
+     * Load view vào contentArea và tự động setMainApp cho controller con.
+     */
+    private void loadView(String fxml) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
+            Parent screen = loader.load();
+
+            Object ctrl = loader.getController();
+
+            // Inject MainApp nếu controller có hàm setMainApp(MainApp)
+            try {
+                ctrl.getClass().getMethod("setMainApp", MainApp.class)
+                        .invoke(ctrl, mainApp);
+            } catch (Exception ignored) {}
+
+            contentArea.getChildren().setAll(screen);
+
+        } catch (Exception e) {
+            System.err.println("Error loading view: " + fxml);
+            e.printStackTrace();
+        }
+    }
+
+    // ====================== MENU BUTTON EVENTS =======================
 
     @FXML
-    private Button btnCustomerManagement;
-
-    @FXML
-    private Button btnRentalManagement;
-
-    @FXML
-    private Button btnReportManagement;
-
-    @FXML
-    private Button btnLogout;
-
-    // MainApp được truyền từ MainApp khi load Dashboard
-    public void setMainApp(MainApp mainApp) {
-        this.mainApp = mainApp;
+    private void handleCarManagement() {
+        loadView("/fxml/CarManagement.fxml");
     }
 
     @FXML
-    private void initialize() {
+    private void handleCustomerManagement() {
+        loadView("/fxml/CustomerManagement.fxml");
+    }
 
-        btnCarManagement.setOnAction(e -> {
-            if (mainApp != null) mainApp.showCarManagement();
-        });
+    @FXML
+    private void handleRentalManagement() {
+        loadView("/fxml/CarRentalManagement.fxml");
+    }
 
-        btnCustomerManagement.setOnAction(e -> {
-            if (mainApp != null) mainApp.showCustomerManagement();
-        });
+    @FXML
+    private void handleReviewManagement() {
+        loadView("/fxml/ReviewManagement.fxml");
+    }
 
-        btnRentalManagement.setOnAction(e -> {
-            if (mainApp != null) mainApp.showCarRentalManagement();
-        });
-
-        btnReportManagement.setOnAction(e -> {
-            if (mainApp != null) mainApp.showReportDashboard();
-        });
-
-        btnLogout.setOnAction(e -> {
-            if (mainApp != null) mainApp.showLogin();
-        });
+    @FXML
+    private void handleLogout() {
+        if (mainApp != null) {
+            mainApp.showLogin();
+        }
     }
 }

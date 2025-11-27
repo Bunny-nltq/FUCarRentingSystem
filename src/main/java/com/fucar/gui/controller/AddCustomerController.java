@@ -1,75 +1,103 @@
 package com.fucar.gui.controller;
 
-import com.fucar.entity.Account;
 import com.fucar.entity.Customer;
-import com.fucar.service.AccountService;
+import com.fucar.entity.Account;
 import com.fucar.service.CustomerService;
+import com.fucar.service.AccountService;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+import javafx.scene.control.*;
 
 public class AddCustomerController {
-
-    private final CustomerService customerService = new CustomerService();
-    private final AccountService accountService = new AccountService();
 
     @FXML private TextField txtName;
     @FXML private TextField txtEmail;
     @FXML private TextField txtPhone;
-    @FXML private TextField txtAddress;
+    @FXML private TextField txtIdentityCard;
+    @FXML private DatePicker dpBirthday;
+    @FXML private TextField txtLicenceNumber;
+    @FXML private DatePicker dpLicenceDate;
 
     @FXML private Button btnSave;
     @FXML private Button btnCancel;
 
+    private CustomerManagementController parent;
+
+    private final CustomerService customerService = new CustomerService();
+    private final AccountService accountService = new AccountService();
+
+    public void setParentController(CustomerManagementController parent) {
+        this.parent = parent;
+    }
+
     @FXML
-    public void initialize() {
-        btnSave.setOnAction(e -> saveCustomer());
-        btnCancel.setOnAction(e -> close());
+    private void initialize() {
+        btnSave.setOnAction(e -> save());
+        btnCancel.setOnAction(e -> parent.clearRightPane());
     }
 
-    private void saveCustomer() {
+    private void save() {
+        try {
 
-        String name = txtName.getText();
-        String email = txtEmail.getText();
-        String phone = txtPhone.getText();
-        String address = txtAddress.getText();
+            if (txtName.getText().isEmpty() ||
+                txtEmail.getText().isEmpty() ||
+                txtPhone.getText().isEmpty()) {
 
-        // ============================
-        // 1) TẠO ACCOUNT
-        // ============================
-        Account acc = new Account();
-        acc.setEmail(email);
-        acc.setAccountName(name);
-        acc.setRole("CUSTOMER");
+                showAlert("Validation Error", "Please fill in all required fields.");
+                return;
+            }
 
-        acc.setPasswordHash(accountService.hashPassword("123456")); // default
+            if (!txtEmail.getText().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+                showAlert("Email Error", "Invalid email format.");
+                return;
+            }
 
-        accountService.save(acc);
+            String defaultPassword = "123456";
 
-        // ============================
-        // 2) TẠO CUSTOMER
-        // ============================
-        Customer c = new Customer();
-        c.setCustomerName(name);
-        c.setEmail(email);
-        c.setMobile(phone);
+            Account acc = new Account();
+            acc.setEmail(txtEmail.getText());
+            acc.setRole("CUSTOMER");
+            acc.setAccountName(txtName.getText());
+            acc.setPasswordHash(accountService.hashPassword(defaultPassword));
+            accountService.save(acc);
 
-        c.setPassword("123456");  // NOT NULL column
-        c.setIdentityCard("N/A");
-        c.setLicenceNumber("N/A");
-        c.setBirthday(null);
-        c.setLicenceDate(null);
+            Customer c = new Customer();
+            c.setCustomerName(txtName.getText());
+            c.setEmail(txtEmail.getText());
+            c.setMobile(txtPhone.getText());
+            c.setIdentityCard(txtIdentityCard.getText());
+            c.setPassword(defaultPassword);
 
-        c.setAccount(acc);
+            c.setBirthday(dpBirthday.getValue());
+            c.setLicenceNumber(txtLicenceNumber.getText());
+            c.setLicenceDate(dpLicenceDate.getValue());
 
-        customerService.addCustomer(c);
+            c.setAccount(acc);
 
-        close();
+            customerService.addCustomer(c);
+
+            if (parent != null) parent.reloadAfterForm();
+
+            showAlertInfo("Success", "Customer created successfully!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", e.getMessage());
+        }
     }
 
-    private void close() {
-        Stage stage = (Stage) txtName.getScene().getWindow();
-        stage.close();
+    private void showAlert(String title, String msg) {
+        Alert a = new Alert(Alert.AlertType.ERROR);
+        a.setHeaderText(null);
+        a.setTitle(title);
+        a.setContentText(msg);
+        a.showAndWait();
+    }
+
+    private void showAlertInfo(String title, String msg) {
+        Alert a = new Alert(Alert.AlertType.INFORMATION);
+        a.setHeaderText(null);
+        a.setTitle(title);
+        a.setContentText(msg);
+        a.showAndWait();
     }
 }

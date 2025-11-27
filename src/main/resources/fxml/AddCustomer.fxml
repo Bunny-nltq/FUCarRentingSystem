@@ -7,7 +7,7 @@
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.fucar.gui.controller.AddCustomerController"
       alignment="TOP_CENTER"
-      spacing="15" >
+      spacing="15">
 
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
@@ -17,6 +17,7 @@
            style="-fx-font-size: 20px; -fx-font-weight: bold;" />
 
     <GridPane hgap="10" vgap="10">
+
         <Label text="Full Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
         <TextField fx:id="txtName" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
@@ -26,8 +27,18 @@
         <Label text="Phone:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
         <TextField fx:id="txtPhone" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-        <Label text="Address:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-        <TextField fx:id="txtAddress" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+        <Label text="Birthday:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <DatePicker fx:id="dpBirthday" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <Label text="Identity Card:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtIdentityCard" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+        <Label text="Licence Number:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtLicenceNumber" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+        <Label text="Licence Date:" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+        <DatePicker fx:id="dpLicenceDate" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
     </GridPane>
 
     <HBox spacing="15" alignment="CENTER">
@@ -36,3 +47,4 @@
     </HBox>
 
 </VBox>
+ 

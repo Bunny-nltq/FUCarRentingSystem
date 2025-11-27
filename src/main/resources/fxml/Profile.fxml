@@ -13,7 +13,6 @@
         <Insets top="30" right="30" bottom="30" left="30"/>
     </padding>
 
-
     <!-- TITLE -->
     <Label text="My Profile"
            style="-fx-font-size: 24px; -fx-font-weight: bold"/>
@@ -33,9 +32,9 @@
         <Label text="Mobile:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
         <TextField fx:id="txtPhone" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-        <!-- ADDRESS -->
-        <Label text="Address / Identity Card:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-        <TextField fx:id="txtAddress" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        <!-- IDENTITY CARD -->
+        <Label text="Identity Card:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtIdentityCard" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
         <!-- BIRTHDAY -->
         <Label text="Birthday:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
@@ -58,14 +57,8 @@
                    GridPane.columnIndex="1"/>
     </GridPane>
 
-    <!-- BUTTONS -->
-    <HBox spacing="30" alignment="CENTER">
-        <Button fx:id="btnBack" text="Back"
-                onAction="#goBack"
-                style="-fx-padding: 8 25; -fx-background-color: #cccccc; -fx-font-size: 14px"/>
-
-        <Button fx:id="btnSave" text="Save Changes"
-                style="-fx-padding: 8 25; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px"/>
-    </HBox>
+    <!-- SAVE BUTTON ONLY -->
+    <Button fx:id="btnSave" text="Save Changes"
+            style="-fx-padding: 8 25; -fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px"/>
 
 </VBox>
