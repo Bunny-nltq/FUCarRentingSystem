@@ -1,21 +1,30 @@
 package com.fucar.browsecars;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
 import com.fucar.MainApp;
 import com.fucar.entity.Car;
+import com.fucar.entity.CarRental;
+import com.fucar.service.CarRentalService;
 import com.fucar.service.CarService;
-import com.fucar.session.UserSession;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-
-import java.util.List;
 
 public class BrowseCarsController {
 
@@ -34,10 +43,65 @@ public class BrowseCarsController {
     @FXML
     private ScrollPane scrollPane;
 
+    // Details Section
+    @FXML
+    private VBox detailsSection;
+
+    @FXML
+    private Label lblCarName;
+
+    @FXML
+    private Label lblProducer;
+
+    @FXML
+    private Label lblYear;
+
+    @FXML
+    private Label lblColor;
+
+    @FXML
+    private Label lblCapacity;
+
+    @FXML
+    private Label lblStatus;
+
+    @FXML
+    private Label lblPrice;
+
+    @FXML
+    private Label lblLicensePlate;
+
+    @FXML
+    private Label lblImportDate;
+
+    @FXML
+    private TextArea txtDescription;
+
+    // Rental Section
+    @FXML
+    private VBox rentalSection;
+
+    @FXML
+    private DatePicker dpStartDate;
+
+    @FXML
+    private DatePicker dpEndDate;
+
+    @FXML
+    private Spinner<Integer> spinnerDays;
+
+    @FXML
+    private Label lblTotalPrice;
+
+    @FXML
+    private Button btnRent;
+
     private MainApp mainApp;
     private int loggedCustomerId;
     private CarService carService;
+    private CarRentalService rentalService;
     private ObservableList<Car> carsList;
+    private Car selectedCar;
 
     // ===============================
     // INITIALIZATION
@@ -45,6 +109,7 @@ public class BrowseCarsController {
     @FXML
     public void initialize() {
         carService = new CarService();
+        rentalService = new CarRentalService();
         carsList = FXCollections.observableArrayList();
 
         // Setup filter options
@@ -56,6 +121,19 @@ public class BrowseCarsController {
                 "SUV"
         ));
         cmbFilter.setValue("All Cars");
+
+        // Setup rental spinner
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 365, 1);
+        spinnerDays.setValueFactory(valueFactory);
+
+        // Set today as default start date
+        dpStartDate.setValue(LocalDate.now());
+        dpEndDate.setValue(LocalDate.now().plusDays(1));
+
+        // Listen to date changes
+        dpStartDate.valueProperty().addListener((obs, oldVal, newVal) -> updateEndDate());
+        dpEndDate.valueProperty().addListener((obs, oldVal, newVal) -> updateTotalPrice());
+        spinnerDays.valueProperty().addListener((obs, oldVal, newVal) -> updateEndDate());
 
         // Load all cars on startup
         loadCars();
@@ -103,65 +181,108 @@ public class BrowseCarsController {
     }
 
     // ===============================
-    // CREATE CAR CARD
+    // CREATE CAR CARD (CLICKABLE)
     // ===============================
     private HBox createCarCard(Car car) {
-        HBox card = new HBox(20);
-        card.setStyle("-fx-border-color: #ddd; -fx-border-radius: 5; -fx-padding: 15; -fx-background-color: #f9f9f9; -fx-border-width: 1;");
-        card.setPrefHeight(150);
+        HBox card = new HBox(15);
+        card.setStyle("-fx-border-color: #3498db; -fx-border-radius: 5; -fx-padding: 12; -fx-background-color: #ecf0f1; -fx-border-width: 2; -fx-cursor: hand;");
+        card.setPrefHeight(100);
 
         // Left side: Car info
-        VBox infoBox = new VBox(8);
-        infoBox.setPrefWidth(350);
+        VBox infoBox = new VBox(6);
+        infoBox.setPrefWidth(300);
+        infoBox.setStyle("-fx-cursor: hand;");
 
         // Car name
         Label lblCarName = new Label(car.getCarName());
-        lblCarName.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;");
+        lblCarName.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
 
-        // Car details
-        Label lblProducer = new Label("Producer: " + (car.getProducer() != null ? car.getProducer().getProducerName() : "N/A"));
-        lblProducer.setStyle("-fx-font-size: 12px; -fx-text-fill: #666;");
-
-        Label lblYear = new Label("Year: " + car.getCarModelYear());
-        lblYear.setStyle("-fx-font-size: 12px; -fx-text-fill: #666;");
-
-        Label lblColor = new Label("Color: " + car.getColor());
-        lblColor.setStyle("-fx-font-size: 12px; -fx-text-fill: #666;");
-
-        Label lblCapacity = new Label("Capacity: " + car.getCapacity() + " seats");
-        lblCapacity.setStyle("-fx-font-size: 12px; -fx-text-fill: #666;");
+        // Car details - compact view
+        Label lblDetails = new Label(
+            (car.getProducer() != null ? car.getProducer().getName() : "N/A") + " • " +
+            car.getCarModelYear() + " • " +
+            car.getCapacity() + " seats"
+        );
+        lblDetails.setStyle("-fx-font-size: 11px; -fx-text-fill: #7f8c8d;");
 
         Label lblStatus = new Label("Status: " + car.getStatus());
         String statusColor = "AVAILABLE".equals(car.getStatus()) ? "#27ae60" : "#e74c3c";
-        lblStatus.setStyle("-fx-font-size: 12px; -fx-text-fill: " + statusColor + "; -fx-font-weight: bold;");
+        lblStatus.setStyle("-fx-font-size: 11px; -fx-text-fill: " + statusColor + "; -fx-font-weight: bold;");
 
-        infoBox.getChildren().addAll(lblCarName, lblProducer, lblYear, lblColor, lblCapacity, lblStatus);
+        infoBox.getChildren().addAll(lblCarName, lblDetails, lblStatus);
 
-        // Right side: Price and action buttons
-        VBox actionBox = new VBox(10);
-        actionBox.setStyle("-fx-alignment: CENTER_RIGHT;");
-        actionBox.setPrefWidth(200);
+        // Right side: Price and button
+        VBox actionBox = new VBox(8);
+        actionBox.setStyle("-fx-alignment: CENTER; -fx-cursor: hand;");
 
-        Label lblPrice = new Label("$" + String.format("%.2f", car.getRentPrice()) + " / day");
-        lblPrice.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;");
+        Label lblPrice = new Label("$" + String.format("%.2f", car.getRentPrice()));
+        lblPrice.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;");
 
-        Button btnViewDetails = new Button("View Details");
-        btnViewDetails.setStyle("-fx-padding: 8 20; -fx-background-color: #3498db; -fx-text-fill: white; -fx-border-radius: 5;");
-        btnViewDetails.setPrefWidth(150);
-        btnViewDetails.setOnAction(e -> viewCarDetails(car));
+        Label lblPriceDay = new Label("/ day");
+        lblPriceDay.setStyle("-fx-font-size: 10px; -fx-text-fill: #7f8c8d;");
 
-        Button btnRent = new Button("Rent Now");
-        btnRent.setStyle("-fx-padding: 8 20; -fx-background-color: #27ae60; -fx-text-fill: white; -fx-border-radius: 5;");
-        btnRent.setPrefWidth(150);
-        btnRent.setDisable(!car.getStatus().equals("AVAILABLE"));
-        btnRent.setOnAction(e -> rentCar(car));
+        Button btnSelect = new Button("Select");
+        btnSelect.setStyle("-fx-padding: 6 15; -fx-background-color: #3498db; -fx-text-fill: white; -fx-border-radius: 3; -fx-font-size: 11px;");
+        btnSelect.setPrefWidth(80);
+        btnSelect.setOnAction(e -> selectCar(car));
 
-        actionBox.getChildren().addAll(lblPrice, btnViewDetails, btnRent);
+        actionBox.getChildren().addAll(lblPrice, lblPriceDay, btnSelect);
 
-        card.getChildren().addAll(infoBox, new Pane(new javafx.scene.control.Separator()));
-        card.getChildren().add(actionBox);
+        card.getChildren().addAll(infoBox, actionBox);
+
+        // Make entire card clickable to select car
+        card.setOnMouseClicked(e -> selectCar(car));
 
         return card;
+    }
+
+    // ===============================
+    // SELECT CAR - Display details inline
+    // ===============================
+    private void selectCar(Car car) {
+        this.selectedCar = car;
+
+        // Update car details
+        lblCarName.setText(car.getCarName());
+        lblProducer.setText(car.getProducer() != null ? car.getProducer().getName() : "N/A");
+        lblYear.setText(String.valueOf(car.getCarModelYear()));
+        lblColor.setText(car.getColor());
+        lblCapacity.setText(car.getCapacity() + " seats");
+        lblLicensePlate.setText(car.getLicensePlate());
+        lblImportDate.setText(car.getImportDate() != null ? car.getImportDate().toString() : "N/A");
+        lblPrice.setText("$" + String.format("%.2f", car.getRentPrice()) + " / day");
+        lblStatus.setText(car.getStatus());
+        String statusColor = "AVAILABLE".equals(car.getStatus()) ? "#27ae60" : "#e74c3c";
+        lblStatus.setStyle("-fx-text-fill: " + statusColor + "; -fx-font-weight: bold;");
+        txtDescription.setText(car.getDescription() != null ? car.getDescription() : "No description available");
+
+        // Update rental form
+        dpStartDate.setValue(LocalDate.now());
+        dpEndDate.setValue(LocalDate.now().plusDays(1));
+        spinnerDays.getValueFactory().setValue(1);
+        updateTotalPrice();
+
+        // Enable/disable rent button based on availability
+        btnRent.setDisable(!car.getStatus().equals("AVAILABLE"));
+
+        // Highlight selected car card
+        refreshCarCardStyles();
+    }
+
+    // ===============================
+    // REFRESH CAR CARD STYLES
+    // ===============================
+    private void refreshCarCardStyles() {
+        for (javafx.scene.Node node : carsContainer.getChildren()) {
+            if (node instanceof HBox) {
+                HBox card = (HBox) node;
+                if (card.getUserData() == selectedCar) {
+                    card.setStyle("-fx-border-color: #27ae60; -fx-border-radius: 5; -fx-padding: 12; -fx-background-color: #d5f4e6; -fx-border-width: 3; -fx-cursor: hand;");
+                } else {
+                    card.setStyle("-fx-border-color: #3498db; -fx-border-radius: 5; -fx-padding: 12; -fx-background-color: #ecf0f1; -fx-border-width: 2; -fx-cursor: hand;");
+                }
+            }
+        }
     }
 
     // ===============================
@@ -173,8 +294,9 @@ public class BrowseCarsController {
         String filterType = cmbFilter.getValue();
 
         List<Car> filteredCars = carsList.stream()
-                .filter(car -> car.getCarName().toLowerCase().contains(searchText) ||
-                        (car.getProducer() != null && car.getProducer().getProducerName().toLowerCase().contains(searchText)))
+                .filter(car -> searchText.isEmpty() || 
+                        car.getCarName().toLowerCase().contains(searchText) ||
+                        (car.getProducer() != null && car.getProducer().getName().toLowerCase().contains(searchText)))
                 .filter(car -> {
                     if ("Available".equals(filterType)) {
                         return "AVAILABLE".equals(car.getStatus());
@@ -192,51 +314,109 @@ public class BrowseCarsController {
     }
 
     // ===============================
-    // VIEW CAR DETAILS
+    // RENTAL DATE MANAGEMENT
     // ===============================
-    private void viewCarDetails(Car car) {
+    private void updateEndDate() {
+        if (dpStartDate.getValue() != null) {
+            int days = spinnerDays.getValue();
+            dpEndDate.setValue(dpStartDate.getValue().plusDays(days));
+            updateTotalPrice();
+        }
+    }
+
+    private void updateTotalPrice() {
+        if (selectedCar != null && dpStartDate.getValue() != null && dpEndDate.getValue() != null) {
+            long days = ChronoUnit.DAYS.between(dpStartDate.getValue(), dpEndDate.getValue());
+            if (days < 0) days = 0;
+            if (days == 0) days = 1;
+
+            double totalPrice = selectedCar.getRentPrice() * days;
+            lblTotalPrice.setText("Total: $" + String.format("%.2f", totalPrice) + " for " + days + " day(s)");
+        }
+    }
+
+    // ===============================
+    // HANDLE RENT INLINE
+    // ===============================
+    @FXML
+    private void handleRentInline() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CarDetails.fxml"));
-            Parent root = loader.load();
+            if (selectedCar == null) {
+                showError("Please select a car first");
+                return;
+            }
 
-            CarDetailsController controller = loader.getController();
-            controller.setCar(car);
-            controller.setMainApp(mainApp);
+            LocalDate startDate = dpStartDate.getValue();
+            LocalDate endDate = dpEndDate.getValue();
 
-            Stage stage = new Stage();
-            stage.setTitle("Car Details - " + car.getCarName());
-            stage.setScene(new Scene(root, 600, 500));
-            stage.showAndWait();
+            // Validation
+            if (startDate == null || endDate == null) {
+                showError("Please select start and end dates");
+                return;
+            }
+
+            if (startDate.isAfter(endDate)) {
+                showError("Start date must be before end date");
+                return;
+            }
+
+            if (startDate.isBefore(LocalDate.now())) {
+                showError("Start date cannot be in the past");
+                return;
+            }
+
+            if (!selectedCar.getStatus().equals("AVAILABLE")) {
+                showError("This car is not available for rental");
+                return;
+            }
+
+            // Create rental
+            CarRental rental = new CarRental();
+            rental.setPickupDate(startDate);
+            rental.setReturnDate(endDate);
+
+            long days = ChronoUnit.DAYS.between(startDate, endDate);
+            if (days == 0) days = 1;
+
+            double totalPrice = selectedCar.getRentPrice() * days;
+            rental.setRentPrice(totalPrice);
+            rental.setStatus("PENDING");
+
+            rentalService.createRental(rental, loggedCustomerId, selectedCar.getCarID());
+
+            showSuccess("Rental request created successfully!\nYour booking is pending admin approval.");
+            
+            // Reset form
+            selectedCar = null;
+            clearRentalForm();
+            loadCars();
+
         } catch (Exception e) {
-            showError("Error loading car details: " + e.getMessage());
+            showError("Error creating rental: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     // ===============================
-    // RENT CAR
+    // CLEAR RENTAL FORM
     // ===============================
-    private void rentCar(Car car) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/RentCar.fxml"));
-            Parent root = loader.load();
-
-            RentCarController controller = loader.getController();
-            controller.setCar(car);
-            controller.setCustomerId(loggedCustomerId);
-            controller.setMainApp(mainApp);
-
-            Stage stage = new Stage();
-            stage.setTitle("Rent Car - " + car.getCarName());
-            stage.setScene(new Scene(root, 600, 500));
-            stage.showAndWait();
-
-            // Reload cars after rental
-            loadCars();
-        } catch (Exception e) {
-            showError("Error opening rent car dialog: " + e.getMessage());
-            e.printStackTrace();
-        }
+    private void clearRentalForm() {
+        lblCarName.setText("Select a car");
+        lblProducer.setText("N/A");
+        lblYear.setText("N/A");
+        lblColor.setText("N/A");
+        lblCapacity.setText("N/A");
+        lblLicensePlate.setText("N/A");
+        lblImportDate.setText("N/A");
+        lblPrice.setText("$0.00 / day");
+        lblStatus.setText("N/A");
+        txtDescription.setText("");
+        
+        dpStartDate.setValue(LocalDate.now());
+        dpEndDate.setValue(LocalDate.now().plusDays(1));
+        spinnerDays.getValueFactory().setValue(1);
+        lblTotalPrice.setText("Total: $0.00 for 0 day(s)");
+        btnRent.setDisable(true);
     }
 
     // ===============================
@@ -250,10 +430,20 @@ public class BrowseCarsController {
         alert.showAndWait();
     }
 
+    private void showSuccess(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
     @FXML
     private void handleRefresh() {
         txtSearch.clear();
         cmbFilter.setValue("All Cars");
+        selectedCar = null;
+        clearRentalForm();
         loadCars();
     }
 }

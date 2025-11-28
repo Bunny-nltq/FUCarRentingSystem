@@ -3,46 +3,42 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
 
-<BorderPane xmlns="http://javafx.com/javafx/20"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.fucar.gui.controller.CustomerManagementController"
-            stylesheets="@/css/web.css">
+<VBox xmlns="http://javafx.com/javafx/20"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fucar.gui.controller.CustomerManagementController"
+      spacing="15"
+      padding="20"
+      VBox.vgrow="ALWAYS">
 
-    <top>
-        <Label text="Customer Management"
-               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-padding: 10 0 10 20;"/>
-    </top>
+    <Label text="Customer Management"
+           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
 
-    <center>
-        <VBox spacing="10" style="-fx-padding: 20;">
-            <TableView fx:id="customerTable" prefWidth="700" prefHeight="450" styleClass="web-table">
-                <columns>
-                    <TableColumn fx:id="colID" text="ID" prefWidth="60"/>
-                    <TableColumn fx:id="colName" text="Name" prefWidth="180"/>
-                    <TableColumn fx:id="colEmail" text="Email" prefWidth="220"/>
-                    <TableColumn fx:id="colPhone" text="Phone" prefWidth="120"/>
-                    <TableColumn fx:id="colBirthday" text="Birthday" prefWidth="120"/>
-                    <TableColumn fx:id="colIdentityCard" text="Identity Card" prefWidth="140"/>
-                    <TableColumn fx:id="colLicenceNumber" text="Licence Number" prefWidth="140"/>
-                    <TableColumn fx:id="colLicenceDate" text="Licence Date" prefWidth="140"/>
-                </columns>
-            </TableView>
+    <TableView fx:id="customerTable" prefHeight="400" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colID" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="colName" text="Name" prefWidth="130"/>
+            <TableColumn fx:id="colEmail" text="Email" prefWidth="150"/>
+            <TableColumn fx:id="colPhone" text="Phone" prefWidth="100"/>
+            <TableColumn fx:id="colBirthday" text="Birthday" prefWidth="100"/>
+            <TableColumn fx:id="colIdentityCard" text="ID Card" prefWidth="100"/>
+            <TableColumn fx:id="colLicenceNumber" text="License #" prefWidth="100"/>
+            <TableColumn fx:id="colLicenceDate" text="License Date" prefWidth="100"/>
+        </columns>
+    </TableView>
 
-            <HBox spacing="10" alignment="CENTER">
-                <Button fx:id="btnAddCustomer" text="Add Customer" onAction="#handleAddCustomer" />
-                <Button fx:id="btnEditCustomer" text="Edit Customer" onAction="#handleEditCustomer" />
-                <Button fx:id="btnDeleteCustomer" text="Delete Customer" onAction="#handleDeleteCustomer" />
-            </HBox>
-        </VBox>
-    </center>
+    <HBox spacing="10" style="-fx-alignment: CENTER;">
+        <Button text="➕ Add Customer" onAction="#handleAddCustomer" 
+                style="-fx-padding: 10 20; -fx-background-color: #27ae60; -fx-text-fill: white;"/>
+        <Button text="✎ Edit Customer" onAction="#handleEditCustomer" 
+                style="-fx-padding: 10 20; -fx-background-color: #3498db; -fx-text-fill: white;"/>
+        <Button text="🗑 Delete Customer" onAction="#handleDeleteCustomer" 
+                style="-fx-padding: 10 20; -fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <Button text="Refresh" onAction="#loadCustomerData"
+                style="-fx-padding: 10 20; -fx-background-color: #95a5a6; -fx-text-fill: white;"/>
+    </HBox>
 
-    <right>
-        <StackPane fx:id="rightPane" style="-fx-padding: 20; -fx-pref-width: 400;">
-            <VBox alignment="CENTER" spacing="8">
-                <Label text="Actions" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
-                <Label text="Click Add/Edit Customer to load form here." wrapText="true"/>
-            </VBox>
-        </StackPane>
-    </right>
+    <StackPane fx:id="rightPane" minHeight="200">
+    </StackPane>
 
-</BorderPane>
+</VBox>

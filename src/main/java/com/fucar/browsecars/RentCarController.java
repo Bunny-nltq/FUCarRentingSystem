@@ -1,9 +1,12 @@
 package com.fucar.browsecars;
 
+import java.time.LocalDate;
+
 import com.fucar.MainApp;
 import com.fucar.entity.Car;
 import com.fucar.entity.CarRental;
 import com.fucar.service.CarRentalService;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -12,8 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.stage.Stage;
-
-import java.time.LocalDate;
 
 public class RentCarController {
 
@@ -119,19 +120,16 @@ public class RentCarController {
 
             // Create rental
             CarRental rental = new CarRental();
-            rental.setRentalDate(LocalDate.now());
-            rental.setStartDate(startDate);
-            rental.setEndDate(endDate);
+            rental.setPickupDate(startDate);
+            rental.setReturnDate(endDate);
 
             long days = java.time.temporal.ChronoUnit.DAYS.between(startDate, endDate);
             if (days == 0) days = 1;
 
             double totalPrice = car.getRentPrice() * days;
-            rental.setActualPrice(totalPrice);
+            rental.setRentPrice(totalPrice);
             rental.setStatus("PENDING");
 
-            // This would need customer and car to be properly set
-            // Assuming CarRentalService will handle that based on customerId and carId
             rentalService.createRental(rental, customerId, car.getCarID());
 
             showSuccess("Rental request created successfully! Waiting for approval.");

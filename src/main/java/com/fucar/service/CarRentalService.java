@@ -1,16 +1,21 @@
 package com.fucar.service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
 import com.fucar.entity.Car;
 import com.fucar.entity.CarRental;
+import com.fucar.entity.Customer;
 import com.fucar.repository.CarRentalRepository;
-
-import java.time.temporal.ChronoUnit;
-import java.time.LocalDate;
-import java.util.List;
+import com.fucar.repository.CarRepository;
+import com.fucar.repository.CustomerRepository;
 
 public class CarRentalService {
 
     private final CarRentalRepository repo = new CarRentalRepository();
+    private final CustomerRepository customerRepo = new CustomerRepository();
+    private final CarRepository carRepo = new CarRepository();
 
     // Validate + tính giá thuê tự động
     public boolean createRental(CarRental rental) {
@@ -23,6 +28,27 @@ public class CarRentalService {
 
         repo.save(rental);
         return true;
+    }
+
+    // Create rental with customer ID and car ID
+    public void createRental(CarRental rental, int customerId, int carId) {
+        try {
+            Customer customer = customerRepo.findById(customerId);
+            Car car = carRepo.findById(carId);
+            
+            if (customer != null && car != null) {
+                rental.setCustomer(customer);
+                rental.setCar(car);
+                
+                // Tính giá
+                double price = calculatePrice(car, rental.getPickupDate(), rental.getReturnDate());
+                rental.setRentPrice(price);
+                
+                repo.save(rental);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error creating rental: " + e.getMessage());
+        }
     }
 
     public boolean updateRental(CarRental rental) {
@@ -40,6 +66,10 @@ public class CarRentalService {
         return true;
     }
 
+    public void update(CarRental rental) {
+        repo.update(rental);
+    }
+
     // Validate điều kiện ngày
     public boolean validateDates(LocalDate pickup, LocalDate returned) {
         return pickup != null && returned != null && pickup.isBefore(returned);
@@ -49,8 +79,9 @@ public class CarRentalService {
     public double calculatePrice(Car car, LocalDate pickup, LocalDate returned) {
         long days = ChronoUnit.DAYS.between(pickup, returned);
         if (days <= 0) days = 1;
-        return days * car.getPricePerDay();
+        return days * car.getRentPrice();
     }
+    
     public boolean existsByCustomerId(Integer customerId) {
         return repo.existsByCustomerId(customerId);
     }

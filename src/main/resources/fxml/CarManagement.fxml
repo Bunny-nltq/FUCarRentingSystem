@@ -2,28 +2,32 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 
-<VBox alignment="TOP_CENTER" spacing="10"
+<VBox spacing="15" padding="20"
       xmlns="http://javafx.com/javafx/20"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.fucar.gui.controller.CarManagementController"
-      stylesheets="@../css/style.css">
+      VBox.vgrow="ALWAYS">
 
-    <Label text="Car Management" />
+    <Label text="Car Management" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
 
-    <TableView fx:id="carTable" prefWidth="600" prefHeight="300">
+    <TableView fx:id="carTable" prefHeight="400" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn text="ID" prefWidth="50" />
-            <TableColumn text="Name" prefWidth="150" />
-            <TableColumn text="Model Year" prefWidth="100" />
-            <TableColumn text="Color" prefWidth="100" />
-            <TableColumn text="Capacity" prefWidth="100" />
+            <TableColumn fx:id="colId" text="ID" prefWidth="50" />
+            <TableColumn fx:id="colName" text="Car Name" prefWidth="120" />
+            <TableColumn fx:id="colYear" text="Year" prefWidth="80" />
+            <TableColumn fx:id="colColor" text="Color" prefWidth="90" />
+            <TableColumn fx:id="colCapacity" text="Capacity" prefWidth="80" />
+            <TableColumn fx:id="colStatus" text="Status" prefWidth="100" />
+            <TableColumn fx:id="colPrice" text="Daily Price" prefWidth="100" />
         </columns>
     </TableView>
 
-    <HBox spacing="10" alignment="CENTER">
-        <Button fx:id="btnAddCar" text="Add Car" />
-        <Button fx:id="btnEditCar" text="Edit Car" />
-        <Button fx:id="btnDeleteCar" text="Delete Car" />
+    <HBox spacing="10" style="-fx-alignment: CENTER;">
+        <Button fx:id="btnAddCar" text="Add Car" style="-fx-padding: 10 20; -fx-background-color: #27ae60; -fx-text-fill: white;"/>
+        <Button fx:id="btnEditCar" text="Edit Car" style="-fx-padding: 10 20; -fx-background-color: #3498db; -fx-text-fill: white;"/>
+        <Button fx:id="btnDeleteCar" text="Delete Car" style="-fx-padding: 10 20; -fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <Button fx:id="btnRefresh" text="Refresh" style="-fx-padding: 10 20; -fx-background-color: #95a5a6; -fx-text-fill: white;"/>
     </HBox>
 
 </VBox>

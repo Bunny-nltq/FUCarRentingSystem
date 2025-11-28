@@ -1,12 +1,13 @@
 package com.fucar.repository;
 
-import com.fucar.entity.CarRental;
-import com.fucar.util.HibernateUtil;
+import java.time.LocalDate;
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import java.time.LocalDate;
-import java.util.List;
+import com.fucar.entity.CarRental;
+import com.fucar.util.HibernateUtil;
 
 public class CarRentalRepository {
 
@@ -95,6 +96,33 @@ public class CarRentalRepository {
 
         session.close();
         return count != null && count > 0;
+    }
+
+    // Kiểm tra xe có nằm trong giao dịch thuê nào không
+    public boolean existsByCarId(Integer carId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Long count = session.createQuery(
+                "select count(c) from CarRental c where c.car.carID = :carId",
+                Long.class
+        )
+        .setParameter("carId", carId)
+        .uniqueResult();
+
+        session.close();
+        return count != null && count > 0;
+    }
+
+    // Tìm danh sách các giao dịch có xe cụ thể
+    public List<CarRental> findByCarId(Integer carId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        List<CarRental> list = session.createQuery(
+                "from CarRental c where c.car.carID = :carId",
+                CarRental.class
+        )
+        .setParameter("carId", carId)
+        .list();
+        session.close();
+        return list;
     }
 
 }

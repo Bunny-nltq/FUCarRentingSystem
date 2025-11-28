@@ -2,6 +2,7 @@ package com.fucar.browsecars;
 
 import com.fucar.MainApp;
 import com.fucar.entity.Car;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -55,7 +56,7 @@ public class CarDetailsController {
         if (car == null) return;
 
         lblCarName.setText(car.getCarName());
-        lblProducer.setText(car.getProducer() != null ? car.getProducer().getProducerName() : "N/A");
+        lblProducer.setText(car.getProducer() != null ? car.getProducer().getName() : "N/A");
         lblYear.setText(String.valueOf(car.getCarModelYear()));
         lblColor.setText(car.getColor());
         lblCapacity.setText(car.getCapacity() + " seats");

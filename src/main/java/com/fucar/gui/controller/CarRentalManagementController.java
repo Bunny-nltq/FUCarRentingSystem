@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 public class CarRentalManagementController {
 
@@ -21,8 +22,10 @@ public class CarRentalManagementController {
     @FXML private TableColumn<CarRental, String> colCar;
     @FXML private TableColumn<CarRental, LocalDate> colStartDate;
     @FXML private TableColumn<CarRental, LocalDate> colEndDate;
+    @FXML private TableColumn<CarRental, String> colStatus;
+    @FXML private TableColumn<CarRental, Double> colPrice;
 
-    @FXML private Button btnAddRental, btnEditRental, btnDeleteRental;
+    @FXML private Button btnApprove, btnReject, btnDelete, btnRefresh;
 
     // DÙNG ĐÚNG SERVICE
     private final CarRentalService rentalService = new CarRentalService();
@@ -41,9 +44,10 @@ public class CarRentalManagementController {
         setupTable();
         loadRentals();
 
-        btnAddRental.setOnAction(e -> addRental());
-        btnEditRental.setOnAction(e -> editRental());
-        btnDeleteRental.setOnAction(e -> deleteRental());
+        btnApprove.setOnAction(e -> approveRental());
+        btnReject.setOnAction(e -> rejectRental());
+        btnDelete.setOnAction(e -> deleteRental());
+        btnRefresh.setOnAction(e -> loadRentals());
     }
 
     // ============================
@@ -75,14 +79,26 @@ public class CarRentalManagementController {
 
         colStartDate.setCellValueFactory(c ->
                 new javafx.beans.property.SimpleObjectProperty<>(
-                        c.getValue().getPickupDate()
+                        c.getValue().getStartDate()
                 )
         );
 
         colEndDate.setCellValueFactory(c ->
                 new javafx.beans.property.SimpleObjectProperty<>(
-                        c.getValue().getReturnDate()
+                        c.getValue().getEndDate()
                 )
+        );
+
+        colStatus.setCellValueFactory(c ->
+                new javafx.beans.property.SimpleStringProperty(
+                        c.getValue().getStatus()
+                )
+        );
+
+        colPrice.setCellValueFactory(c ->
+                new javafx.beans.property.SimpleDoubleProperty(
+                        c.getValue().getActualPrice()
+                ).asObject()
         );
 
         rentalTable.setItems(rentalList);
@@ -92,28 +108,75 @@ public class CarRentalManagementController {
     // LOAD RENTAL FROM DATABASE
     // ============================
     private void loadRentals() {
-        rentalList.setAll(rentalService.getAll());
+        try {
+            rentalList.setAll(rentalService.getAll());
+            rentalTable.refresh();
+        } catch (Exception e) {
+            showAlert("Error", "Error loading rentals: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     // ============================
-    // ADD RENTAL
+    // APPROVE RENTAL
     // ============================
-    private void addRental() {
-        showAlert("Info", "Add Rental Clicked (chưa làm form)");
-    }
-
-    // ============================
-    // EDIT RENTAL
-    // ============================
-    private void editRental() {
+    private void approveRental() {
         CarRental selected = rentalTable.getSelectionModel().getSelectedItem();
 
         if (selected == null) {
-            showAlert("Error", "Please select a rental to edit.");
+            showAlert("Warning", "Please select a rental to approve.");
             return;
         }
 
-        showAlert("Edit", "Edit rental: " + selected.getRentalId());
+        if (!selected.getStatus().equals("PENDING")) {
+            showAlert("Warning", "Only pending rentals can be approved.");
+            return;
+        }
+
+        try {
+            selected.setStatus("APPROVED");
+            rentalService.update(selected);
+            loadRentals();
+            showAlert("Success", "Rental approved successfully.");
+        } catch (Exception e) {
+            showAlert("Error", "Error approving rental: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    // ============================
+    // REJECT RENTAL
+    // ============================
+    private void rejectRental() {
+        CarRental selected = rentalTable.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            showAlert("Warning", "Please select a rental to reject.");
+            return;
+        }
+
+        if (!selected.getStatus().equals("PENDING")) {
+            showAlert("Warning", "Only pending rentals can be rejected.");
+            return;
+        }
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Reject Rental");
+        confirm.setHeaderText(null);
+        confirm.setContentText("Are you sure you want to reject this rental request?");
+
+        Optional<ButtonType> result = confirm.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                selected.setStatus("REJECTED");
+                rentalService.update(selected);
+                loadRentals();
+                showAlert("Success", "Rental rejected successfully.");
+            } catch (Exception e) {
+                showAlert("Error", "Error rejecting rental: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
     }
 
     // ============================
@@ -124,14 +187,26 @@ public class CarRentalManagementController {
         CarRental selected = rentalTable.getSelectionModel().getSelectedItem();
 
         if (selected == null) {
-            showAlert("Error", "Please select a rental to delete.");
+            showAlert("Warning", "Please select a rental to delete.");
             return;
         }
 
-        rentalService.delete(selected.getRentalId());
-        rentalList.remove(selected);
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Delete Rental");
+        confirm.setHeaderText(null);
+        confirm.setContentText("Are you sure you want to delete this rental record?");
 
-        showAlert("Success", "Rental deleted.");
+        Optional<ButtonType> result = confirm.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                rentalService.delete(selected.getRentalId());
+                rentalList.remove(selected);
+                showAlert("Success", "Rental deleted successfully.");
+            } catch (Exception e) {
+                showAlert("Error", "Error deleting rental: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
     }
 
     // ============================
@@ -139,7 +214,8 @@ public class CarRentalManagementController {
     // ============================
     private void showAlert(String title, String msg) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText(title);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
         alert.setContentText(msg);
         alert.showAndWait();
     }

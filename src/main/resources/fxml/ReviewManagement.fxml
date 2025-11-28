@@ -7,25 +7,33 @@
 <VBox xmlns="http://javafx.com/javafx/20"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.fucar.gui.controller.ReviewManagementController"
-      spacing="20" alignment="CENTER">
-
-    <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
-    </padding>
+      spacing="15" 
+      padding="20"
+      VBox.vgrow="ALWAYS">
 
     <Label text="Review Management"
-           style="-fx-font-size: 24px; -fx-font-weight: bold;" />
+           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
 
-    <TableView fx:id="tableReviews" prefWidth="800">
+    <TableView fx:id="tableReviews" prefHeight="400" VBox.vgrow="ALWAYS">
 
         <columns>
-            <TableColumn fx:id="colID" text="ID" prefWidth="60" />
-            <TableColumn fx:id="colCustomer" text="Customer ID" prefWidth="120" />
-            <TableColumn fx:id="colCar" text="Car ID" prefWidth="120" />
-            <TableColumn fx:id="colRating" text="Rating" prefWidth="100" />
+            <TableColumn fx:id="colID" text="ID" prefWidth="50" />
+            <TableColumn fx:id="colCustomer" text="Customer" prefWidth="120" />
+            <TableColumn fx:id="colCar" text="Car" prefWidth="120" />
+            <TableColumn fx:id="colRating" text="Rating" prefWidth="80" />
             <TableColumn fx:id="colComment" text="Comment" prefWidth="300" />
-            <TableColumn fx:id="colDate" text="Created At" prefWidth="150" />
+            <TableColumn fx:id="colDate" text="Date" prefWidth="130" />
         </columns>
     </TableView>
+
+    <HBox spacing="10" style="-fx-alignment: CENTER_RIGHT;">
+        <Button fx:id="btnDelete"
+                text="🗑 Delete"
+                style="-fx-padding: 10 20; -fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+        
+        <Button fx:id="btnRefresh"
+                text="Refresh"
+                style="-fx-padding: 10 20; -fx-background-color: #95a5a6; -fx-text-fill: white;"/>
+    </HBox>
 
 </VBox>

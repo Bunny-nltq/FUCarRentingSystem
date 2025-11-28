@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/20"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fucar.gui.controller.AddCarDialogController"
+      spacing="15"
+      style="-fx-padding: 20;"
+      VBox.vgrow="ALWAYS">
+
+    <Label text="Car Information"
+           style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS">
+        <VBox spacing="12" style="-fx-padding: 10;">
+
+            <!-- CAR NAME -->
+            <HBox spacing="10" alignmentProperty="CENTER_LEFT">
+                <Label text="Car Name:" style="-fx-font-weight: bold; -fx-min-width: 100;" prefWidth="100"/>
+                <TextField fx:id="txtCarName" 
+                           promptText="e.g. Toyota Vios"
+                           style="-fx-padding: 8; -fx-border-radius: 3;"
+                           HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <!-- PRODUCER -->
+            <HBox spacing="10" alignmentProperty="CENTER_LEFT">
+                <Label text="Producer:" style="-fx-font-weight: bold; -fx-min-width: 100;" prefWidth="100"/>
+                <ComboBox fx:id="cmbProducer" 
+                          style="-fx-padding: 8; -fx-border-radius: 3;"
+                          HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <!-- YEAR -->
+            <HBox spacing="10" alignmentProperty="CENTER_LEFT">
+                <Label text="Model Year:" style="-fx-font-weight: bold; -fx-min-width: 100;" prefWidth="100"/>
+                <Spinner fx:id="spnYear" 
+                         style="-fx-padding: 8; -fx-border-radius: 3;"
+                         prefWidth="200"/>
+            </HBox>
+
+            <!-- COLOR -->
+            <HBox spacing="10" alignmentProperty="CENTER_LEFT">
+                <Label text="Color:" style="-fx-font-weight: bold; -fx-min-width: 100;" prefWidth="100"/>
+                <TextField fx:id="txtColor" 
+                           promptText="e.g. White"
+                           style="-fx-padding: 8; -fx-border-radius: 3;"
+                           HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <!-- CAPACITY -->
+            <HBox spacing="10" alignmentProperty="CENTER_LEFT">
+                <Label text="Capacity:" style="-fx-font-weight: bold; -fx-min-width: 100;" prefWidth="100"/>
+                <Spinner fx:id="spnCapacity" 
+                         style="-fx-padding: 8; -fx-border-radius: 3;"
+                         prefWidth="200"/>
+                <Label text="seats" style="-fx-text-fill: #666;"/>
+            </HBox>
+
+            <!-- LICENSE PLATE -->
+            <HBox spacing="10" alignmentProperty="CENTER_LEFT">
+                <Label text="License Plate:" style="-fx-font-weight: bold; -fx-min-width: 100;" prefWidth="100"/>
+                <TextField fx:id="txtLicensePlate" 
+                           promptText="e.g. 51A-12345"
+                           style="-fx-padding: 8; -fx-border-radius: 3;"
+                           HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <!-- IMPORT DATE -->
+            <HBox spacing="10" alignmentProperty="CENTER_LEFT">
+                <Label text="Import Date:" style="-fx-font-weight: bold; -fx-min-width: 100;" prefWidth="100"/>
+                <DatePicker fx:id="dpImportDate" 
+                            style="-fx-padding: 8; -fx-border-radius: 3;"
+                            prefWidth="200"/>
+            </HBox>
+
+            <!-- RENT PRICE -->
+            <HBox spacing="10" alignmentProperty="CENTER_LEFT">
+                <Label text="Daily Rent Price:" style="-fx-font-weight: bold; -fx-min-width: 100;" prefWidth="100"/>
+                <Spinner fx:id="spnRentPrice" 
+                         style="-fx-padding: 8; -fx-border-radius: 3;"
+                         prefWidth="200"/>
+                <Label text="$" style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;"/>
+            </HBox>
+
+            <!-- STATUS -->
+            <HBox spacing="10" alignmentProperty="CENTER_LEFT">
+                <Label text="Status:" style="-fx-font-weight: bold; -fx-min-width: 100;" prefWidth="100"/>
+                <ComboBox fx:id="cmbStatus" 
+                          style="-fx-padding: 8; -fx-border-radius: 3;"
+                          HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <!-- DESCRIPTION -->
+            <Label text="Description:" style="-fx-font-weight: bold;"/>
+            <TextArea fx:id="txtDescription"
+                      wrapText="true"
+                      prefRowCount="6"
+                      style="-fx-padding: 8; -fx-border-radius: 3;"/>
+
+        </VBox>
+    </ScrollPane>
+
+    <!-- BUTTONS -->
+    <HBox spacing="10" style="-fx-alignment: CENTER_RIGHT;">
+        <Button fx:id="btnCancel" 
+                text="Cancel"
+                style="-fx-padding: 10 25; -fx-background-color: #95a5a6; -fx-text-fill: white;"/>
+        <Button fx:id="btnSave" 
+                text="Save"
+                style="-fx-padding: 10 25; -fx-background-color: #27ae60; -fx-text-fill: white;"/>
+    </HBox>
+
+</VBox>
