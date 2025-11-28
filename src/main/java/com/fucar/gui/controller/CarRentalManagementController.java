@@ -374,4 +374,4 @@ public class CarRentalManagementController {
         alert.setContentText(content);
         alert.showAndWait();
     }
-}
+} 

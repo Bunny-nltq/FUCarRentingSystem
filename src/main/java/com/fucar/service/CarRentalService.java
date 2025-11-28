@@ -16,14 +16,14 @@ public class CarRentalService {
     private final CarRepository carRepo = new CarRepository();
     
     
- // ===================== GET RENTALS BY CUSTOMER =====================
+    // ===================== LẤY DANH SÁCH THUÊ XE THEO KHÁCH HÀNG =====================
     public List<CarRental> getRentalsByCustomer(Integer customerId) {
         if (customerId == null) return List.of();
         // Giả định rằng Repository có phương thức này
         return rentalRepo.findByCustomerId(customerId); 
     }
 
-    // ===================== CREATE RENTAL =====================
+    // ===================== TẠO ĐƠN THUÊ XE =====================
     public void createRental(CarRental rental) throws IllegalArgumentException {
         if (rental == null)
             throw new IllegalArgumentException("Rental cannot be null.");
@@ -39,13 +39,13 @@ public class CarRentalService {
         if (car == null)
             throw new IllegalArgumentException("Rental must have a car assigned.");
 
-        // Tự động tính giá nếu chưa có
+        // Tự động tính giá nếu người dùng không nhập
         if (rental.getRentPrice() == null || rental.getRentPrice() == 0) {
             BigDecimal price = calculatePrice(car, pickup, returned);
             rental.setRentPrice(price.doubleValue());
         }
 
-        // Cập nhật trạng thái xe nếu status là RENTED
+        // Nếu trạng thái đơn thuê là RENTED → cập nhật trạng thái xe
         if ("RENTED".equalsIgnoreCase(rental.getStatus())) {
             car.setStatus("RENTED");
             carRepo.update(car);
@@ -54,9 +54,9 @@ public class CarRentalService {
         rentalRepo.save(rental);
     }
 
-    // ===================== UPDATE RENTAL =====================
+    // ===================== CẬP NHẬT ĐƠN THUÊ XE =====================
     public void updateRental(CarRental rental) throws IllegalArgumentException {
-        // Không validate car status khi update vì xe đang được thuê
+        // Không kiểm tra trạng thái xe khi update vì xe đang được thuê
         if (rental == null)
             throw new IllegalArgumentException("Rental cannot be null.");
 
@@ -71,26 +71,27 @@ public class CarRentalService {
         if (car == null)
             throw new IllegalArgumentException("Rental must have a car assigned.");
 
+        // Tính lại giá khi cập nhật đơn
         BigDecimal price = calculatePrice(rental.getCar(), rental.getPickupDate(), rental.getReturnDate());
         rental.setRentPrice(price.doubleValue());
 
         rentalRepo.update(rental);
     }
 
-    // ===================== DELETE RENTAL =====================
+    // ===================== XÓA ĐƠN THUÊ XE =====================
     public void deleteRental(int rentalId) {
         CarRental rental = rentalRepo.findById(rentalId);
         if (rental != null) {
             Car car = rental.getCar();
             rentalRepo.delete(rental);
 
-            // Cập nhật trạng thái xe về AVAILABLE
+            // Sau khi xóa đơn → trả xe về trạng thái AVAILABLE
             car.setStatus("AVAILABLE");
             carRepo.update(car);
         }
     }
 
-    // ===================== VALIDATE RENTAL =====================
+    // ===================== KIỂM TRA HỢP LỆ ĐƠN THUÊ XE =====================
     private void validateRental(CarRental rental) throws IllegalArgumentException {
         if (rental == null)
             throw new IllegalArgumentException("Rental cannot be null.");
@@ -109,19 +110,19 @@ public class CarRentalService {
             throw new IllegalArgumentException("Car is not available for rental.");
     }
 
-    // ===================== CALCULATE PRICE =====================
+    // ===================== TÍNH GIÁ THUÊ XE =====================
     public BigDecimal calculatePrice(Car car, LocalDate pickup, LocalDate returned) {
         Double dailyPriceDouble = car.getRentPrice() != null ? car.getRentPrice() : 0.0;
         BigDecimal dailyPrice = BigDecimal.valueOf(dailyPriceDouble);
         
         long days = ChronoUnit.DAYS.between(pickup, returned);
-        if (days <= 0) days = 1;
+        if (days <= 0) days = 1; // Tối thiểu 1 ngày
 
         BigDecimal dayCount = BigDecimal.valueOf(days);
         return dailyPrice.multiply(dayCount);
     }
 
-    // ===================== GET ALL RENTALS =====================
+    // ===================== LẤY TẤT CẢ ĐƠN THUÊ =====================
     public List<CarRental> getAll() {
         return rentalRepo.findAll();
     }
@@ -130,7 +131,7 @@ public class CarRentalService {
         return rentalRepo.findById(id);
     }
 
-    // ===================== FILTER & SORT =====================
+    // ===================== LỌC & SẮP XẾP =====================
     public List<CarRental> filterByDate(LocalDate start, LocalDate end) {
         return rentalRepo.filterByDate(start, end);
     }
@@ -143,14 +144,14 @@ public class CarRentalService {
         return rentalRepo.sortByPickupDateDesc();
     }
 
-    // ===================== GET RENTALS BY ACCOUNT =====================
+    // ===================== LẤY ĐƠN THUÊ THEO ACCOUNT =====================
     public List<CarRental> getRentalsByAccount(Integer accountID) {
         if (accountID == null) return List.of();
         return rentalRepo.findByCustomerAccountId(accountID);
     }
 
-	public boolean existsByCustomerId(Integer customerID) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    public boolean existsByCustomerId(Integer customerID) {
+        // TODO: Chưa triển khai
+        return false;
+    }
 }
