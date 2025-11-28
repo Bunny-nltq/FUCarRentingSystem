@@ -1,29 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
 
-<VBox alignment="TOP_CENTER" spacing="10"
-      xmlns="http://javafx.com/javafx/20"
+<VBox alignment="TOP_LEFT" spacing="15"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.fucar.gui.controller.ReviewController"
-      stylesheets="@../css/style.css">
+      xmlns="http://javafx.com/javafx/20"
+      fx:controller="com.fucar.gui.controller.ReviewController">
 
-    <Label text="Reviews" />
+    <padding>
+        <Insets top="20" left="20" right="20" bottom="20"/>
+    </padding>
 
-    <TableView fx:id="reviewTable" prefWidth="700" prefHeight="300">
-        <columns>
-            <TableColumn text="ID" prefWidth="50"/>
-            <TableColumn text="Customer" prefWidth="150"/>
-            <TableColumn text="Car" prefWidth="150"/>
-            <TableColumn text="Rating" prefWidth="100"/>
-            <TableColumn text="Comment" prefWidth="250"/>
-        </columns>
-    </TableView>
+    <Label text="Review a Car"
+           style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
 
-    <HBox spacing="10" alignment="CENTER">
-        <Button fx:id="btnAddReview" text="Add Review" />
-        <Button fx:id="btnEditReview" text="Edit Review" />
-        <Button fx:id="btnDeleteReview" text="Delete Review" />
+    <!-- Select Car -->
+    <HBox spacing="10">
+        <Label text="Select Car:"/>
+        <ComboBox fx:id="cbCars" prefWidth="250"/>
     </HBox>
+
+    <!-- Rating -->
+    <HBox spacing="10">
+        <Label text="Rating:"/>
+        <Slider fx:id="sliderRating"
+                min="1" max="5"
+                majorTickUnit="1"
+                snapToTicks="true"
+                showTickLabels="true"
+                showTickMarks="true"
+                prefWidth="250"/>
+    </HBox>
+
+    <!-- Comment -->
+    <Label text="Comment:"/>
+    <TextArea fx:id="txtComment" prefRowCount="4" prefWidth="350"/>
+
+    <!-- Submit -->
+    <Button fx:id="btnSubmit"
+            text="Submit Review"
+            onAction="#submitReview"
+            style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-padding: 8 18;"/>
 
 </VBox>

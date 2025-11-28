@@ -14,26 +14,62 @@ public class CarRentalService {
 
     private final CarRentalRepository rentalRepo = new CarRentalRepository();
     private final CarRepository carRepo = new CarRepository();
+    
+    
+ // ===================== GET RENTALS BY CUSTOMER =====================
+    public List<CarRental> getRentalsByCustomer(Integer customerId) {
+        if (customerId == null) return List.of();
+        // Giả định rằng Repository có phương thức này
+        return rentalRepo.findByCustomerId(customerId); 
+    }
 
     // ===================== CREATE RENTAL =====================
     public void createRental(CarRental rental) throws IllegalArgumentException {
-        validateRental(rental);
+        if (rental == null)
+            throw new IllegalArgumentException("Rental cannot be null.");
 
-        BigDecimal price = calculatePrice(rental.getCar(), rental.getPickupDate(), rental.getReturnDate());
-        rental.setRentPrice(price.doubleValue());
+        LocalDate pickup = rental.getPickupDate();
+        LocalDate returned = rental.getReturnDate();
+        if (pickup == null || returned == null)
+            throw new IllegalArgumentException("Pickup and Return dates cannot be null.");
+        if (!pickup.isBefore(returned))
+            throw new IllegalArgumentException("Pickup date must be before Return date.");
 
-
-        // Cập nhật trạng thái xe
         Car car = rental.getCar();
-        car.setStatus("RENTED");
-        carRepo.update(car);
+        if (car == null)
+            throw new IllegalArgumentException("Rental must have a car assigned.");
+
+        // Tự động tính giá nếu chưa có
+        if (rental.getRentPrice() == null || rental.getRentPrice() == 0) {
+            BigDecimal price = calculatePrice(car, pickup, returned);
+            rental.setRentPrice(price.doubleValue());
+        }
+
+        // Cập nhật trạng thái xe nếu status là RENTED
+        if ("RENTED".equalsIgnoreCase(rental.getStatus())) {
+            car.setStatus("RENTED");
+            carRepo.update(car);
+        }
 
         rentalRepo.save(rental);
     }
 
     // ===================== UPDATE RENTAL =====================
     public void updateRental(CarRental rental) throws IllegalArgumentException {
-        validateRental(rental);
+        // Không validate car status khi update vì xe đang được thuê
+        if (rental == null)
+            throw new IllegalArgumentException("Rental cannot be null.");
+
+        LocalDate pickup = rental.getPickupDate();
+        LocalDate returned = rental.getReturnDate();
+        if (pickup == null || returned == null)
+            throw new IllegalArgumentException("Pickup and Return dates cannot be null.");
+        if (!pickup.isBefore(returned))
+            throw new IllegalArgumentException("Pickup date must be before Return date.");
+
+        Car car = rental.getCar();
+        if (car == null)
+            throw new IllegalArgumentException("Rental must have a car assigned.");
 
         BigDecimal price = calculatePrice(rental.getCar(), rental.getPickupDate(), rental.getReturnDate());
         rental.setRentPrice(price.doubleValue());
@@ -75,11 +111,14 @@ public class CarRentalService {
 
     // ===================== CALCULATE PRICE =====================
     public BigDecimal calculatePrice(Car car, LocalDate pickup, LocalDate returned) {
+        Double dailyPriceDouble = car.getRentPrice() != null ? car.getRentPrice() : 0.0;
+        BigDecimal dailyPrice = BigDecimal.valueOf(dailyPriceDouble);
+        
         long days = ChronoUnit.DAYS.between(pickup, returned);
         if (days <= 0) days = 1;
 
         BigDecimal dayCount = BigDecimal.valueOf(days);
-        return car.getRentalPrice().multiply(dayCount);
+        return dailyPrice.multiply(dayCount);
     }
 
     // ===================== GET ALL RENTALS =====================
@@ -109,4 +148,9 @@ public class CarRentalService {
         if (accountID == null) return List.of();
         return rentalRepo.findByCustomerAccountId(accountID);
     }
+
+	public boolean existsByCustomerId(Integer customerID) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

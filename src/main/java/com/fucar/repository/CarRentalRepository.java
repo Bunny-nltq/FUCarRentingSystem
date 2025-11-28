@@ -2,10 +2,16 @@ package com.fucar.repository;
 
 import com.fucar.entity.CarRental;
 import com.fucar.util.HibernateUtil;
+
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.CriteriaBuilder;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 public class CarRentalRepository {
@@ -30,10 +36,10 @@ public class CarRentalRepository {
 
     // ===================== XÓA RENTAL =====================
     public void delete(CarRental rental) {
-        if (rental == null || rental.getCar() == null) return;
+        if (rental == null || rental.getRentalId() == null) return;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction tx = session.beginTransaction();
-            CarRental managedRental = session.get(CarRental.class, rental.getCar());
+            CarRental managedRental = session.get(CarRental.class, rental.getRentalId());
             if (managedRental != null) {
                 session.remove(managedRental);
             }
@@ -45,14 +51,26 @@ public class CarRentalRepository {
     public CarRental findById(Integer id) {
         if (id == null) return null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(CarRental.class, id);
+            return session.createQuery(
+                "SELECT cr FROM CarRental cr " +
+                "LEFT JOIN FETCH cr.customer " +
+                "LEFT JOIN FETCH cr.car " +
+                "WHERE cr.rentalId = :id", 
+                CarRental.class)
+                .setParameter("id", id)
+                .uniqueResult();
         }
     }
 
     // ===================== LẤY TẤT CẢ =====================
     public List<CarRental> findAll() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("from CarRental", CarRental.class).list();
+            return session.createQuery(
+                "SELECT cr FROM CarRental cr " +
+                "LEFT JOIN FETCH cr.customer " +
+                "LEFT JOIN FETCH cr.car", 
+                CarRental.class)
+                .list();
         }
     }
 
@@ -60,7 +78,10 @@ public class CarRentalRepository {
     public List<CarRental> filterByDate(LocalDate start, LocalDate end) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
-                    "from CarRental c where c.pickupDate >= :start and c.returnDate <= :end",
+                    "SELECT cr FROM CarRental cr " +
+                    "LEFT JOIN FETCH cr.customer " +
+                    "LEFT JOIN FETCH cr.car " +
+                    "WHERE cr.pickupDate >= :start AND cr.returnDate <= :end",
                     CarRental.class
             )
             .setParameter("start", start)
@@ -73,7 +94,10 @@ public class CarRentalRepository {
     public List<CarRental> sortByPriceDesc() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
-                    "from CarRental c order by c.rentPrice desc",
+                    "SELECT cr FROM CarRental cr " +
+                    "LEFT JOIN FETCH cr.customer " +
+                    "LEFT JOIN FETCH cr.car " +
+                    "ORDER BY cr.rentPrice DESC",
                     CarRental.class
             ).list();
         }
@@ -82,7 +106,10 @@ public class CarRentalRepository {
     public List<CarRental> sortByPickupDateDesc() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
-                    "from CarRental c order by c.pickupDate desc",
+                    "SELECT cr FROM CarRental cr " +
+                    "LEFT JOIN FETCH cr.customer " +
+                    "LEFT JOIN FETCH cr.car " +
+                    "ORDER BY cr.pickupDate DESC",
                     CarRental.class
             ).list();
         }
@@ -93,7 +120,10 @@ public class CarRentalRepository {
         if (CustomerID == null) return List.of();
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery(
-                    "from CarRental c where c.customer.customerId = :CustomerID",
+                    "SELECT cr FROM CarRental cr " +
+                    "LEFT JOIN FETCH cr.customer " +
+                    "LEFT JOIN FETCH cr.car " +
+                    "WHERE cr.customer.customerID = :CustomerID",
                     CarRental.class
             )
             .setParameter("CustomerID", CustomerID)
@@ -102,5 +132,24 @@ public class CarRentalRepository {
     }
     
     
-    
+    public List<CarRental> findByCustomerId(Integer customerId) {
+        if (customerId == null) {
+            return Collections.emptyList();
+        }
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                    "SELECT cr FROM CarRental cr " +
+                    "LEFT JOIN FETCH cr.customer " +
+                    "LEFT JOIN FETCH cr.car " +
+                    "WHERE cr.customer.customerID = :customerId",
+                    CarRental.class
+            )
+            .setParameter("customerId", customerId)
+            .list();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
 }

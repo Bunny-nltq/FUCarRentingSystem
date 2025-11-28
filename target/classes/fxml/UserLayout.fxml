@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.fucar.gui.controller.UserLayoutController"
+            stylesheets="@../css/dashboard.css">
+
+    <top>
+        <HBox id="header">
+            <Label id="header-title" text="FUCar User Dashboard"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label fx:id="userEmail"/>
+            <Button fx:id="btnLogout" text="Logout"/>
+        </HBox>
+    </top>
+
+    <left>
+        <VBox id="sidebar">
+            <Label id="menu-title" text="MENU"/>
+            <Button fx:id="btnProfile" text="My Profile" styleClass="menu-btn"/>
+            <Button fx:id="btnRentalHistory" text="Rental History" styleClass="menu-btn"/>
+            <Button fx:id="btnAvailableCars" text="Available Cars" styleClass="menu-btn"/>
+        </VBox>
+    </left>
+
+    <center>
+        <StackPane fx:id="contentArea"/>
+    </center>
+
+</BorderPane>

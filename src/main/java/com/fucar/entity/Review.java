@@ -98,15 +98,37 @@ public class Review {
     }
 
     // ============================
-    // Safe toString (tránh lỗi lazy)
+    // Helper methods for TableView
+    // ============================
+
+    // 🔥 JavaFX TableView sẽ dùng property "rating"
+    public Integer getRating() {
+        return reviewStar;
+    }
+
+    public void setRating(Integer rating) {
+        this.reviewStar = rating;
+    }
+
+    // Lấy ID an toàn tránh Lazy Loading
+    public Integer getCustomerID() {
+        return customer != null ? customer.getCustomerID() : null;
+    }
+
+    public Integer getCarID() {
+        return car != null ? car.getCarID() : null;
+    }
+
+    // ============================
+    // toString (safe)
     // ============================
 
     @Override
     public String toString() {
         return "Review{" +
                 "reviewID=" + reviewID +
-                ", customerID=" + (customer != null ? customer.getCustomerId() : null) +
-                ", carID=" + (car != null ? car.getCarID() : null) +
+                ", customerID=" + getCustomerID() +
+                ", carID=" + getCarID() +
                 ", reviewStar=" + reviewStar +
                 ", comment='" + comment + '\'' +
                 ", createdAt=" + createdAt +

@@ -1,7 +1,6 @@
 package com.fucar;
 
 import com.fucar.entity.Account;
-import com.fucar.entity.Customer;
 import com.fucar.gui.controller.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -12,6 +11,7 @@ import javafx.stage.Stage;
 public class MainApp extends Application {
 
     private Stage primaryStage;
+	private Account loggedUser;
 
     @Override
     public void start(Stage stage) {
@@ -19,66 +19,44 @@ public class MainApp extends Application {
         showLogin();
     }
     
-   
+    
+    public void setLoggedCustomerId(Account acc) {
+        this.loggedUser = acc;
+    }
 
-    // ===================== LOGIN =====================
+
+    // ===============================
+    // LOGIN
+    // ===============================
     public void showLogin() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Login.fxml"));
-            Parent root = loader.load();
-
-            LoginController controller = loader.getController();
-            controller.setMainApp(this); // truyền MainApp
-
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
-
-            primaryStage.setTitle("FU Car Renting System - Login");
-            primaryStage.setScene(scene);
-            primaryStage.show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        loadScreen("/fxml/Login.fxml", "Login",
+                LoginController.class, "/css/style.css");
     }
 
-    // ===================== REGISTER =====================
+    // ===============================
+    // REGISTER
+    // ===============================
     public void showRegister() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Register.fxml"));
-            Parent root = loader.load();
-
-            RegisterController controller = loader.getController();
-            controller.setMainApp(this);
-
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
-
-            primaryStage.setTitle("Register");
-            primaryStage.setScene(scene);
-            primaryStage.show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        loadScreen("/fxml/Register.fxml", "Register",
+                RegisterController.class, "/css/style.css");
     }
 
-    // ===================== DASHBOARDS =====================
-    // Admin
-    public void showAdminDashboard(Account loggedUser) {
+    // ===============================
+    // ADMIN DASHBOARD
+    // ===============================
+    public void showAdminDashboard() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AdminDashboard.fxml"));
             Parent root = loader.load();
 
             AdminDashboardController controller = loader.getController();
             controller.setMainApp(this);
-            controller.setLoggedUser(loggedUser);
 
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/css/web.css").toExternalForm());
 
-            primaryStage.setTitle("Admin Dashboard");
             primaryStage.setScene(scene);
+            primaryStage.setTitle("Admin Dashboard");
             primaryStage.show();
 
         } catch (Exception e) {
@@ -86,7 +64,9 @@ public class MainApp extends Application {
         }
     }
 
-    // Customer
+    // ===============================
+    // CUSTOMER DASHBOARD
+    // ===============================
     public void showCustomerDashboard(Account loggedUser) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CustomerDashboard.fxml"));
@@ -94,87 +74,98 @@ public class MainApp extends Application {
 
             CustomerDashboardController controller = loader.getController();
             controller.setMainApp(this);
-            controller.setLoggedUser(loggedUser);
+            controller.setLoggedCustomer(loggedUser);
 
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
 
+            primaryStage.setScene(scene);
             primaryStage.setTitle("Customer Dashboard");
-            primaryStage.setScene(scene);
             primaryStage.show();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    // ===================== MANAGEMENT SCREENS =====================
-    public void showCarManagement() {
-        loadScreen("/fxml/CarManagement.fxml", "Car Management");
+   
+    public void showCustomerRentals() {
+        loadScreen("/fxml/CustomerRentals.fxml", "CustomerRentals",
+                CustomerDashboardController.class, "/css/style.css");
     }
-
-    public void showCustomerManagement() {
-        loadScreen("/fxml/CustomerManagement.fxml", "Customer Management");
-    }
-
- // Mở màn hình quản lý thuê xe, truyền thông tin người dùng
-    public void showCarRentalManagement(Account loggedUser) {
-        if (loggedUser == null) {
-        	System.out.println("cumtomer null");
-        	return; // tránh lỗi null
-        }
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/CarRentalManagement.fxml"));
-            Parent root = loader.load();
-
-            // Lấy controller và thiết lập dữ liệu
-            CarRentalManagementController controller = loader.getController();
-            controller.setMainApp(this);            // truyền MainApp
-//            controller.setAccountID(loggedUser.getAccountID()); // truyền accountID để load rentals
-            controller.setLoggedUser(loggedUser);
-            // Thiết lập Scene và Stylesheet
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
-
-            primaryStage.setTitle("Car Rental Management");
-            primaryStage.setScene(scene);
-            primaryStage.show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Mở màn hình quản lý Review
-    public void showReviewManagement() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Review.fxml"));
-            Parent root = loader.load();
-
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
-
-            primaryStage.setTitle("Review Management");
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+    
     
 
-    // ===================== HÀM CHUNG LOAD SCREEN =====================
-    private void loadScreen(String fxmlPath, String title) {
+    // ===============================
+    // PROFILE (customer)
+    // ===============================
+    public void showProfileManagement(int customerId) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainLayout.fxml"));
             Parent root = loader.load();
+
+            MainLayoutController controller = loader.getController();
+            controller.setMainApp(this);
+            controller.setCustomerId(customerId);
+            controller.loadProfileContent();
 
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
 
-            primaryStage.setTitle(title);
             primaryStage.setScene(scene);
+            primaryStage.setTitle("My Profile");
+            primaryStage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ===============================
+    // MANAGEMENT (Admin)
+    // ===============================
+    public void showCustomerManagement() {
+        loadScreen("/fxml/CustomerManagement.fxml", "Customer Management",
+                CustomerManagementController.class, "/css/style.css");
+    }
+
+    public void showCarManagement() {
+        loadScreen("/fxml/CarManagement.fxml", "Car Management",
+                CarManagementController.class, "/css/style.css");
+    }
+
+    public void showCarRentalManagement() {
+        loadScreen("/fxml/CarRentalManagement.fxml", "Car Rental Management",
+                CarRentalManagementController.class, "/css/style.css");
+    }
+
+    public void showReviewManagement() {
+        loadScreen("/fxml/Review.fxml", "Review Management",
+                ReviewController.class, "/css/style.css");
+    }
+
+    public void showReportDashboard() {
+        loadScreen("/fxml/ReportDashboard.fxml", "Rental Report Dashboard",
+                ReportDashboardController.class, "/css/style.css");
+    }
+
+    // ==========================================================
+    // GENERIC SCREEN LOADER
+    // ==========================================================
+    private <T> void loadScreen(String fxml, String title, Class<T> type, String css) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
+            Parent root = loader.load();
+
+            T controller = loader.getController();
+            try {
+                type.getMethod("setMainApp", MainApp.class).invoke(controller, this);
+            } catch (NoSuchMethodException ignored) {}
+
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource(css).toExternalForm());
+
+            primaryStage.setScene(scene);
+            primaryStage.setTitle(title);
             primaryStage.show();
 
         } catch (Exception e) {

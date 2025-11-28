@@ -1,6 +1,7 @@
 package com.fucar.entity;
 
 import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -14,13 +15,9 @@ public class Car {
 
     @Column(nullable = false)
     private String carName;
-    
-    private String status; // <-- Cần có trường status
 
     private Integer carModelYear;
-
     private String color;
-
     private Integer capacity;
 
     @Column(length = 500)
@@ -28,92 +25,88 @@ public class Car {
 
     private LocalDate importDate;
 
-    // price per day
-    @Column(nullable = false)
-    private BigDecimal rentalPrice;
-
-    // relationship to producer
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "producerID")
+    @JoinColumn(name = "ProducerID", nullable = false)
     private CarProducer producer;
 
-    // constructors, getters, setters
+    @Column(nullable = false)
+    private Double rentPrice;
 
+    @Column(nullable = false)
+    private String status; // AVAILABLE / RENTED / MAINTENANCE
+
+    @Column(unique = true)
+    private String licensePlate;
+
+    // ===========================
+    // Constructors
+    // ===========================
     public Car() {}
 
-    public Integer getCarID() {
-        return carID;
-    }
-
-    public void setCarID(Integer carID) {
-        this.carID = carID;
-    }
-
-    public String getCarName() {
-        return carName;
-    }
-
-    public void setCarName(String carName) {
+    public Car(String carName, Integer carModelYear, String color, Integer capacity,
+               String description, LocalDate importDate, CarProducer producer,
+               Double rentPrice, String status, String licensePlate) {
         this.carName = carName;
-    }
-    
-    public String getStatus() { return status; } // <-- Thêm cái này
-    public void setStatus(String status) { this.status = status; }
-
-
-    public Integer getCarModelYear() {
-        return carModelYear;
-    }
-
-    public void setCarModelYear(Integer carModelYear) {
         this.carModelYear = carModelYear;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
         this.color = color;
-    }
-
-    public Integer getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(Integer capacity) {
         this.capacity = capacity;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
         this.description = description;
-    }
-
-    public LocalDate getImportDate() {
-        return importDate;
-    }
-
-    public void setImportDate(LocalDate importDate) {
         this.importDate = importDate;
-    }
-
-    public BigDecimal getRentalPrice() {
-        return rentalPrice;
-    }
-
-    public void setRentalPrice(BigDecimal rentalPrice) {
-        this.rentalPrice = rentalPrice;
-    }
-
-    public CarProducer getProducer() {
-        return producer;
-    }
-
-    public void setProducer(CarProducer producer) {
         this.producer = producer;
+        this.rentPrice = rentPrice;
+        this.status = status;
+        this.licensePlate = licensePlate;
+    }
+
+    // ===========================
+    // Getters
+    // ===========================
+    public Integer getCarID() { return carID; }
+    public String getCarName() { return carName; }
+    public Integer getCarModelYear() { return carModelYear; }
+    public String getColor() { return color; }
+    public Integer getCapacity() { return capacity; }
+    public String getDescription() { return description; }
+    public LocalDate getImportDate() { return importDate; }
+    public CarProducer getProducer() { return producer; }
+    public Double getRentPrice() { return rentPrice; }
+    public String getStatus() { return status; }
+    public String getLicensePlate() { return licensePlate; }
+
+    // ===========================
+    // Setters
+    // ===========================
+    public void setCarID(Integer carID) { this.carID = carID; }
+    public void setCarName(String carName) { this.carName = carName; }
+    public void setCarModelYear(Integer carModelYear) { this.carModelYear = carModelYear; }
+    public void setColor(String color) { this.color = color; }
+    public void setCapacity(Integer capacity) { this.capacity = capacity; }
+    public void setDescription(String description) { this.description = description; }
+    public void setImportDate(LocalDate importDate) { this.importDate = importDate; }
+    public void setProducer(CarProducer producer) { this.producer = producer; }
+    public void setRentPrice(Double bigDecimal) { this.rentPrice = bigDecimal; }
+    public void setStatus(String status) { this.status = status; }
+    public void setLicensePlate(String licensePlate) { this.licensePlate = licensePlate; }
+
+    // ===========================
+    // Convenience Helpers
+    // ===========================
+
+    /** Hiển thị tên xe + biển số — RẤT hữu ích cho UI (ComboBox) */
+    public String getDisplayName() {
+        return carName + " - " + licensePlate;
+    }
+
+    /** Alias để tương thích legacy code */
+    public Double getPricePerDay() {
+        return rentPrice;
+    }
+
+    // ===========================
+    // Safe toString (dùng nội bộ)
+    // ===========================
+    @Override
+    public String toString() {
+        return getDisplayName();
     }
 }

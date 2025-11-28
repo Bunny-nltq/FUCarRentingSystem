@@ -1,27 +1,126 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
 
-<VBox spacing="15" alignment="CENTER" xmlns="http://javafx.com/javafx/20"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.fucar.gui.controller.CarRentalManagementController"
-      styleClass="root">
+<BorderPane xmlns="http://javafx.com/javafx/20"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.fucar.gui.controller.CarRentalManagementController"
+            style="-fx-background-color: #ecf0f1;">
 
-    <Label text="My Car Rentals" styleClass="label"/>
+    <!-- TITLE BAR -->
+    <top>
+        <VBox style="-fx-background-color: #2c3e50; -fx-padding: 15;">
+            <Label text="🚗 Car Rental Management"
+                   style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;"/>
+        </VBox>
+    </top>
 
-    <TableView fx:id="tableRentals" prefWidth="750" styleClass="table-view">
-        <columns>
-            <TableColumn text="Car" fx:id="colCarName"/>
-            <TableColumn text="Start Date" fx:id="colStartDate"/>
-            <TableColumn text="End Date" fx:id="colEndDate"/>
-            <TableColumn text="Status" fx:id="colStatus"/>
-            <TableColumn text="Cost" fx:id="colCost"/>
-        </columns>
-    </TableView>
+    <!-- MAIN CONTENT: TABLE LEFT, FORM RIGHT -->
+    <center>
+        <HBox spacing="20" style="-fx-padding: 20;">
+            
+            <!-- ========== LEFT: RENTAL TABLE ========== -->
+            <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);"
+                  HBox.hgrow="ALWAYS">
+                
+                <Label text="Rental List" 
+                       style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                
+                <Separator/>
+                
+                <!-- TABLE -->
+                <TableView fx:id="rentalTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colRentalID" text="ID" prefWidth="50"/>
+                        <TableColumn fx:id="colCustomer" text="Customer" prefWidth="140"/>
+                        <TableColumn fx:id="colCar" text="Car" prefWidth="160"/>
+                        <TableColumn fx:id="colPickupDate" text="Pickup" prefWidth="100"/>
+                        <TableColumn fx:id="colReturnDate" text="Return" prefWidth="100"/>
+                        <TableColumn fx:id="colRentPrice" text="Price" prefWidth="100"/>
+                        <TableColumn fx:id="colStatus" text="Status" prefWidth="90"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                </TableView>
+                
+                <!-- BUTTONS -->
+                <HBox spacing="15" alignment="CENTER">
+                    <Button text="Edit Rental" 
+                            onAction="#handleEdit"
+                            style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-padding: 10 20; -fx-font-size: 14px; -fx-cursor: hand;"/>
+                    
+                    <Button text="Delete Rental" 
+                            onAction="#handleDelete"
+                            style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-padding: 10 20; -fx-font-size: 14px; -fx-cursor: hand;"/>
+                </HBox>
+                
+            </VBox>
+            
+            <!-- ========== RIGHT: ADD/EDIT FORM ========== -->
+            <VBox spacing="15" style="-fx-background-color: white; -fx-padding: 20; -fx-background-radius: 8; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 2);" 
+                  prefWidth="380" VBox.vgrow="ALWAYS">
+                
+                <Label text="Add / Edit Rental" 
+                       style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                
+                <Separator/>
+                
+                <!-- Customer Selection -->
+                <VBox spacing="5">
+                    <Label text="Customer:" style="-fx-font-weight: bold;"/>
+                    <ComboBox fx:id="cmbCustomer" prefWidth="340" promptText="Select Customer"/>
+                </VBox>
+                
+                <!-- Car Selection -->
+                <VBox spacing="5">
+                    <Label text="Car:" style="-fx-font-weight: bold;"/>
+                    <ComboBox fx:id="cmbCar" prefWidth="340" promptText="Select Car"/>
+                </VBox>
+                
+                <!-- Pickup Date -->
+                <VBox spacing="5">
+                    <Label text="Pickup Date:" style="-fx-font-weight: bold;"/>
+                    <DatePicker fx:id="dpPickupDate" prefWidth="340"/>
+                </VBox>
+                
+                <!-- Return Date -->
+                <VBox spacing="5">
+                    <Label text="Return Date:" style="-fx-font-weight: bold;"/>
+                    <DatePicker fx:id="dpReturnDate" prefWidth="340"/>
+                </VBox>
+                
+                <!-- Rent Price (Auto-calculated) -->
+                <VBox spacing="5">
+                    <Label text="Rent Price:" style="-fx-font-weight: bold;"/>
+                    <TextField fx:id="txtRentPrice" prefWidth="340" editable="false" promptText="Auto-calculated"/>
+                </VBox>
+                
+                <!-- Status -->
+                <VBox spacing="5">
+                    <Label text="Status:" style="-fx-font-weight: bold;"/>
+                    <ComboBox fx:id="cmbStatus" prefWidth="340" promptText="Select Status"/>
+                </VBox>
+                
+                <Separator/>
+                
+                <!-- Action Buttons -->
+                <HBox spacing="10" alignment="CENTER">
+                    <Button fx:id="btnSave" 
+                            text="Save Rental" 
+                            onAction="#handleSave"
+                            style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-padding: 10 20; -fx-font-size: 14px; -fx-cursor: hand;"/>
+                    
+                    <Button fx:id="btnClear" 
+                            text="Clear Form" 
+                            onAction="#handleClear"
+                            style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-padding: 10 20; -fx-font-size: 14px; -fx-cursor: hand;"/>
+                </HBox>
+                
+            </VBox>
+            
+        </HBox>
+    </center>
 
-    <HBox spacing="15" alignment="CENTER">  
-        <Button fx:id="btnEdit" text="Edit" styleClass="button" onAction="#deleteRental"/>
-        <Button fx:id="btnDelete" text="Delete" styleClass="button" onAction="#deleteRental"/>
-        <Button fx:id="btnBack" text="Back" styleClass="button" onAction="#goBack"/>
-    </HBox>
-</VBox>
+</BorderPane>

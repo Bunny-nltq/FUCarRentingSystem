@@ -1,52 +1,101 @@
 package com.fucar.service;
 
 import com.fucar.entity.Account;
+import com.fucar.entity.Customer;
 import com.fucar.repository.AccountRepository;
+import com.fucar.repository.CustomerRepository;
 
 import java.security.MessageDigest;
 
 public class AccountService {
 
     private final AccountRepository accountRepo = new AccountRepository();
+    private final CustomerRepository customerRepo = new CustomerRepository();
 
-    // Hash mật khẩu SHA-256
+    // =================================================
+    // HASH PASSWORD (SHA-256)
+    // =================================================
     public String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-            byte[] hash = md.digest(password.getBytes("UTF-8")); // chuẩn UTF-8
+            byte[] hash = md.digest(password.getBytes());
+
             StringBuilder sb = new StringBuilder();
-            for (byte b : hash) sb.append(String.format("%02x", b));
+            for (byte b : hash) {
+                sb.append(String.format("%02x", b));
+            }
+
             return sb.toString();
         } catch (Exception e) {
-            throw new RuntimeException("Hash password error", e);
+            throw new RuntimeException("Error hashing password", e);
         }
     }
 
-    // Login bằng email + password
+    // =================================================
+    // SAVE / UPDATE ACCOUNT
+    // =================================================
+    public void save(Account acc) {
+        accountRepo.save(acc);
+    }
+
+    public void update(Account acc) {
+        accountRepo.update(acc);
+    }
+
+    // =================================================
+    // LOGIN
+    // =================================================
     public Account login(String email, String password) {
+
         Account acc = accountRepo.findByEmail(email);
         if (acc == null) return null;
 
-        String hashed = hashPassword(password);
-        if (acc.getPasswordHash().equals(hashed)) {
-            return acc;
-        }
-        return null;
+        String hash = hashPassword(password);
+
+        if (!acc.getPasswordHash().equals(hash))
+            return null;
+
+        return acc;
     }
 
-    // Register tài khoản mới
-    public boolean register(String email, String accountName, String password, String role) {
-        if (accountRepo.findByEmail(email) != null) {
-            return false; // Email đã tồn tại
-        }
+    // =================================================
+    // REGISTER (Tạo Account + Customer mặc định)
+    // =================================================
+    public boolean register(String email, String password, String role, String accountName) {
 
-        Account newAcc = new Account();
-        newAcc.setEmail(email);
-        newAcc.setAccountName(accountName);
-        newAcc.setPasswordHash(hashPassword(password));
-        newAcc.setRole(role.toUpperCase());
+        // Email tồn tại → không cho đăng ký
+        if (accountRepo.findByEmail(email) != null)
+            return false;
+
+        // Tạo account
+        Account newAcc = new Account(
+                email,
+                hashPassword(password),
+                role,
+                accountName
+        );
 
         accountRepo.save(newAcc);
+
+        // Nếu là khách hàng → tạo bản ghi Customer tương ứng
+        if (role.equalsIgnoreCase("CUSTOMER")) {
+
+            Customer c = new Customer();
+
+            c.setAccount(newAcc);         // ✔ BẮT BUỘC
+            c.setEmail(email);
+            c.setCustomerName(accountName);
+
+            c.setMobile("N/A");
+            c.setIdentityCard("N/A");
+            c.setLicenceNumber("N/A");
+
+            c.setBirthday(null);
+            c.setLicenceDate(null);
+
+            customerRepo.save(c);
+        }
+
         return true;
     }
 }

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/20"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.fucar.gui.controller.CustomerRentalsController">
+
+    
+    <top>
+        <HBox spacing="20" style="-fx-background-color: #2c3e50; -fx-padding: 15;">
+            <Label text="🚗 My Rentals"
+                   style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" />
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button text="Back"
+                    onAction="#handleBack"
+                    style="-fx-background-color: #0097a7; -fx-text-fill: white;" />
+        </HBox>
+    </top>
+
+    
+    <center>
+        <VBox spacing="10" style="-fx-padding: 15;">
+            <TableView fx:id="rentalTable" prefHeight="400">
+                <columns>
+                    <TableColumn fx:id="colRentalID" text="RentalID" prefWidth="70"/>
+                    <TableColumn fx:id="colCustomerID" text="CustomerID" prefWidth="80"/>
+                    <TableColumn fx:id="colCarID" text="CarID" prefWidth="70"/>
+                    <TableColumn fx:id="colPickupDate" text="Pickup Date" prefWidth="100"/>
+                    <TableColumn fx:id="colReturnDate" text="Return Date" prefWidth="100"/>
+                    <TableColumn fx:id="colRentPrice" text="Rent Price" prefWidth="100"/>
+                    <TableColumn fx:id="colStatus" text="Status" prefWidth="100"/>
+                    <TableColumn fx:id="colCreatedAt" text="Created At" prefWidth="120"/>
+                </columns>
+            </TableView>
+
+            
+           
+        </VBox>
+    </center>
+</BorderPane> 
+
+
+
+
+<!--  <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import java.time.LocalDate?>
+<?import java.lang.Double?>
+ <?import javafx.scene.control.cell
+
+<BorderPane xmlns="http://javafx.com/javafx/20"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.fucar.gui.controller.CustomerDashboardController"> <top>
+        <HBox spacing="20" style="-fx-background-color: #2c3e50; -fx-padding: 15;">
+            <Label text="🚗 Danh sách đơn thuê của tôi"
+                   style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" />
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button text="Quay lại Dashboard"
+                    onAction="#handleBack"
+                    style="-fx-background-color: #0097a7; -fx-text-fill: white;" />
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="10" style="-fx-padding: 15;">
+            <TableView fx:id="rentalTable" prefHeight="400">
+                <columns>
+                    <TableColumn fx:id="colRentalID" text="Mã Thuê">
+                         <cellValueFactory>
+                             <PropertyValueFactory property="rentalId"/>
+                         </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="colCustomerID" text="Mã KH">
+                         <cellValueFactory>
+                             <PropertyValueFactory property="customerID"/>
+                         </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="colCarID" text="Mã Xe">
+                         <cellValueFactory>
+                             <PropertyValueFactory property="carID"/>
+                         </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="colPickupDate" text="Ngày Nhận" prefWidth="100"/>
+                    <TableColumn fx:id="colReturnDate" text="Ngày Trả" prefWidth="100"/>
+                    <TableColumn fx:id="colRentPrice" text="Giá Thuê" prefWidth="100"/>
+                    <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="100"/>
+                    <TableColumn fx:id="colCreatedAt" text="Ngày Tạo" prefWidth="120"/>
+                </columns>
+            </TableView>
+
+            
+        </VBox>
+    </center>
+</BorderPane> -->
+
+
+
+
+

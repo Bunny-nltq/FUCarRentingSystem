@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<VBox xmlns="http://javafx.com/javafx/20"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.fucar.gui.controller.ReportDashboardController"
+      spacing="20" alignment="CENTER" padding="20">
+
+    <Label text="Rental Report Dashboard"
+           style="-fx-font-size: 22px; -fx-font-weight: bold"/>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Label text="Start Date:"/>
+        <DatePicker fx:id="startDatePicker"/>
+
+        <Label text="End Date:"/>
+        <DatePicker fx:id="endDatePicker"/>
+
+        <Button fx:id="btnGenerate" text="Generate Report"/>
+    </HBox>
+
+    <TableView fx:id="reportTable" prefWidth="700" prefHeight="400">
+        <columns>
+            <TableColumn text="Rental ID" prefWidth="70"/>
+            <TableColumn text="Customer" prefWidth="150"/>
+            <TableColumn text="Car" prefWidth="150"/>
+            <TableColumn text="Pickup Date" prefWidth="120"/>
+            <TableColumn text="Return Date" prefWidth="120"/>
+            <TableColumn text="Price" prefWidth="80"/>
+        </columns>
+    </TableView>
+
+</VBox>

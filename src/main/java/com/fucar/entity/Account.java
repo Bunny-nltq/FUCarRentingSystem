@@ -1,51 +1,106 @@
 package com.fucar.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Account")
 public class Account {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer accountID;
+    @Column(name = "AccountID")
+    private Integer accountId;
 
-    @Column(nullable = false, unique = true, length = 100)
-    private String email; // dùng để login
+    @Column(name = "AccountName", nullable = false)
+    private String accountName;
 
-    @Column(nullable = false, length = 100)
-    private String accountName; // tên hiển thị
+    @Column(nullable = false, unique = true)
+    private String email;
 
-    @Column(nullable = false, length = 255)
+    // Cột trong DB là PasswordHash
+    @Column(name = "PasswordHash", nullable = false)
     private String passwordHash;
 
-    @Column(nullable = false, length = 20)
-    private String role; // ADMIN / CUSTOMER / STAFF
-
     @Column(nullable = false)
-    private Boolean isLocked = false;
+    private String role; // ADMIN / CUSTOMER
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    /**
+     * Không cascade từ Account → Customer
+     * Tránh lỗi "deleted object would be re-saved by cascade"
+     */
+    @OneToOne(mappedBy = "account", fetch = FetchType.LAZY)
+    private Customer customer;
 
-    // getters & setters
-    public Integer getAccountID() { return accountID; }
-    public void setAccountID(Integer accountID) { this.accountID = accountID; }
+    // =========================
+    // Constructors
+    // =========================
+    public Account() {}
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public Account(String email, String passwordHash, String role, String accountName) {
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.role = role;
+        this.accountName = accountName;
+    }
 
-    public String getAccountName() { return accountName; }
-    public void setAccountName(String accountName) { this.accountName = accountName; }
+    // =========================
+    // Getters
+    // =========================
+    public Integer getAccountId() {
+        return accountId;
+    }
 
-    public String getPasswordHash() { return passwordHash; }
-    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+    public String getEmail() {
+        return email;
+    }
 
-    public String getRole() { return role; }
-    public void setRole(String role) { this.role = role; }
+    public String getPasswordHash() {
+        return passwordHash;
+    }
 
-    public Boolean getIsLocked() { return isLocked; }
-    public void setIsLocked(Boolean isLocked) { this.isLocked = isLocked; }
+    public String getRole() {
+        return role;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    // =========================
+    // Setters
+    // =========================
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /** 
+     * Setter chuẩn để AddCustomerController và RegisterController dùng
+     */
+    public void setPassword(String password) {
+        this.passwordHash = password;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
 }

@@ -10,4 +10,29 @@ public class CustomerService {
     public Customer findByAccountId(Integer accountId) {
         return repository.findByAccountId(accountId);
     }
+
+	public Customer getCustomerById(int currentCustomerID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Customer getAllCustomers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void addCustomer(Customer c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void updateCustomer(Customer c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void deleteCustomer(Integer customerID) {
+		// TODO Auto-generated method stub
+		
+	}
 }

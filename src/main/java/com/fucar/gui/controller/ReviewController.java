@@ -186,4 +186,9 @@ public class ReviewController {
         Alert a = new Alert(Alert.AlertType.INFORMATION, msg);
         a.show();
     }
+
+	public void setCustomerId(int customerId) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/20"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.fucar.gui.controller.MainLayoutController">
+
+    <!-- ================= HEADER ================= -->
+    <top>
+        <HBox style="-fx-background-color: #2c3e50; -fx-padding: 15;">
+            <Label text="🚗 FUCAR RENTAL SYSTEM"
+                   style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;" />
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button fx:id="btnLogout"
+                    text="Logout"
+                    onAction="#handleLogoutClick"
+                    style="-fx-background-color: #0097a7; -fx-text-fill: white;" />
+        </HBox>
+    </top>
+
+    <!-- ================= LEFT NAVIGATION ================= -->
+    <left>
+        <VBox spacing="20"
+              style="-fx-background-color: #34495e; -fx-padding: 20; -fx-pref-width: 200;">
+
+            <Button fx:id="btnProfile"
+                    text="My Profile"
+                    onAction="#handleProfileClick"
+                    style="-fx-text-fill: white; -fx-background-color: #1abc9c;" />
+
+            <Button fx:id="btnCars"
+                    text="My Cars"
+                    onAction="#handleCarClick"
+                    style="-fx-text-fill: white; -fx-background-color: #1abc9c;" />
+
+            <Button fx:id="btnRentals"
+                    text="Rental History"
+                    onAction="#handleRentalsClick"
+                    style="-fx-text-fill: white; -fx-background-color: #1abc9c;" />
+
+            <!-- ⭐ THÊM NÚT REVIEW CAR -->
+            <Button fx:id="btnReview"
+                    text="Review Car"
+                    onAction="#handleReviewClick"
+                    style="-fx-text-fill: white; -fx-background-color: #1abc9c;" />
+
+        </VBox>
+    </left>
+
+    <!-- ================= CONTENT AREA ================= -->
+    <center>
+        <StackPane fx:id="contentArea" style="-fx-padding: 20;">
+        </StackPane>
+    </center>
+
+</BorderPane>

@@ -4,6 +4,8 @@ import com.fucar.entity.Customer;
 import com.fucar.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
+
 import java.util.List;
 
 public class CustomerRepository {
@@ -32,17 +34,29 @@ public class CustomerRepository {
         }
     }
     
-    public Customer findByAccountId(Integer accountId) {
-        if (accountId == null) return null;
+    public Customer findByAccountId(int accountId) {
+        Transaction tx = null;
+        Customer result = null;
 
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery(
-                    "from Customer c where c.account.accountID = :accountID", Customer.class)
-                    .setParameter("accountId", accountId)
-                    .uniqueResult();
+            tx = session.beginTransaction();
+
+            Query<Customer> query = session.createQuery(
+                "FROM Customer c WHERE c.account.accountId = :accountId",
+                Customer.class
+            );
+
+            query.setParameter("accountId", accountId);
+            result = query.uniqueResult();
+
+            tx.commit();
         } catch (Exception e) {
+            if (tx != null) tx.rollback();
             e.printStackTrace();
-            return null;
         }
+
+        return result;
     }
+
+    
 }
